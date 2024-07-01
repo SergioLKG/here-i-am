@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-size: 1em;
+  text-wrap: nowrap;
+  font-family: ;
+}

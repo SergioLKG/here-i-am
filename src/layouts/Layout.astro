@@ -1,0 +1,26 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300" rel="stylesheet">
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-light-cream text-black dark:bg-dark-navy dark:text-white ">
+    <main class="container m-auto w-4/6">
+      <slot />
+    </main>
+  </body>
+</html>

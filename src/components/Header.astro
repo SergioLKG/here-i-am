@@ -1,0 +1,67 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<script>
+  const themeToggleBtn = document.getElementById("theme-toggle");
+  const html = document.documentElement;
+
+  const toggleTheme = () => {
+    html.classList.toggle("dark");
+    const isDarkMode = html.classList.contains("dark");
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+  };
+
+  themeToggleBtn.addEventListener("click", toggleTheme);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      html.classList.add("dark");
+    } else {
+      html.classList.remove("dark");
+    }
+
+    document.body.classList.add("transition-all");
+    html.classList.add("transition-all");
+
+    setTimeout(() => {
+      html.classList.remove("transition-all");
+    }, 1000);
+
+  });
+</script>
+<header class="bg-light-sand bg-opacity-60 dark:bg-slate-900 dark:bg-opacity-60 p-4">
+  <nav class="flex justify-between m-auto w-11/12">
+    <ul class="flex flex-row items-center space-x-4">
+      <li class="hover:opacity-65"><a href="#about">Sobre mí</a></li>
+      <li class="hover:opacity-65"><a href="#projects">Proyectos</a></li>
+      <li class="hover:opacity-65"><a href="#skills">Habilidades</a></li>
+    </ul>
+    <div
+      id="theme-toggle"
+      class="flex align-middle justify-end active:*:opacity-50 select-none pr-5"
+    >
+      <div>
+        <Icon
+          name="sun"
+          class="invisible dark:visible size-6 text-amber-400 transition-opacity duration-300 group-hover:opacity-0 cursor-pointer absolute"
+        />
+        <Icon
+          name="sunFilled"
+          class="invisible dark:visible size-6 text-yellow-400 transition-opacity duration-300 opacity-0 hover:opacity-100 group-hover:opacity-100 absolute cursor-pointer"
+        />
+      </div>
+      <div>
+        <Icon
+          name="moon"
+          class="dark:invisible size-6 text-slate-800 transition-opacity duration-300 group-hover:opacity-0 absolute cursor-pointer"
+        />
+        <Icon
+          name="moonFilled"
+          class="dark:invisible size-6 text-slate-800 transition-opacity duration-300 opacity-0 hover:opacity-100 group-hover:opacity-100 absolute cursor-pointer"
+        />
+      </div>
+    </div>
+  </nav>
+</header>
