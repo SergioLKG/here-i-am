@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 * {
-  font-size: 1em;
-  text-wrap: nowrap;
-  font-family: ;
+  font-size: 1.02em;
+  font-family: 'Roboto', 'Space Grotesk' sans-serif ;
 }
