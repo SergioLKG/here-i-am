@@ -1,0 +1,43 @@
+---
+// src/layouts/BaseLayout.astro
+import "../styles/global.css";
+
+const { title = "Here I Am", children } = Astro.props;
+import Head from "../components/Head.astro"; // Componente de Head para añadir meta etiquetas
+---
+
+<html lang="es">
+  <Head title="Sergio Domínguez Pérez - Her I Am" />
+  <body class="bg-gray-900 font-sans text-white">
+    <!-- Header con navegación lateral o superior -->
+    <header
+      class="top-0 left-0 z-10 fixed flex justify-center items-center bg-gray-800 w-full h-16"
+    >
+      <nav class="space-x-4 text-center">
+        <!-- Enlaces a secciones de la misma página -->
+        <a href="#home" class="text-lg text-white hover:text-gray-400">Inicio</a
+        >
+        <a href="#about" class="text-lg text-white hover:text-gray-400"
+          >Sobre mí</a
+        >
+        <a href="#projects" class="text-lg text-white hover:text-gray-400"
+          >Proyectos</a
+        >
+        <a href="#contact" class="text-lg text-white hover:text-gray-400"
+          >Contacto</a
+        >
+      </nav>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="pt-16">
+      {children}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 p-4 text-center text-sm">
+      Here-I-Am © {new Date().getFullYear()} Sergio Domínguez Pérez. Todos los derechos
+      reservados.
+    </footer>
+  </body>
+</html>
