@@ -9,7 +9,7 @@ document.addEventListener("scroll", () => {
       rect.top <= window.innerHeight / 2 &&
       rect.bottom >= window.innerHeight / 2
     ) {
-      titleElement.innerText = section.dataset.title;
+      titleElement.innerText = `${section.dataset.title} - Sergio Domínguez Pérez`;
     }
   });
 });
