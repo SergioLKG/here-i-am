@@ -1,16 +1,84 @@
+@import url("./icons.css");
+@import url("./keyframes.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
-    scroll-behavior: smooth;
-  }
+:root {
+  --color-primary-a0: #ffffff;
+  --color-primary-a10: #d2d1e4;
+  --color-primary-a20: #a6a6c9;
+  --color-primary-a30: #7a7caf;
+  --color-primary-a40: #4e5595;
+  --color-primary-a50: #18317b;
+  --color-primary-a60: #192862;
+  --color-primary-a70: #182049;
+  --color-primary-a80: #141832;
+  --color-primary-a90: #0f0e1d;
+  --color-primary-a100: #000000;
+}
 
-  /* ICONS */
-  .bg-logo-negative {
-     background-image: url('../../assets/icons/LogoNegative.svg');
-     background-size: contain;
-     background-repeat: no-repeat;
-     background-position: center;
-     background-color: transparent !important;
-  }
+::-moz-selection {
+  /* Code for Firefox */
+  background: #4d5d8fa9;
+  text-shadow: #d2d1e4 0px 0px 5px;
+}
+
+::selection {
+  background: #4d5d8fa9;
+  text-shadow: #d2d1e4 0px 0px 5px;
+}
+
+/* Card */
+.card {
+  align-items: center;
+  box-shadow: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+/** Examples */
+html {
+  scroll-behavior: smooth !important;
+  /* overflow-x: hidden; 
+  TODO */
+}
+
+h1,
+h2 {
+  text-shadow: var(--color-primary-a20) 0 0 10px;
+}
+
+.corpo-container {
+  display: grid;
+  min-height: 100dvh;
+  grid-template-rows: auto 1fr auto;
+}
+
+.main-container {
+  position: relative;
+  z-index: 1;
+}
+.main-containersection {
+  min-height: 100vh;
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* NAVBAR */
+.navbar > a {
+  text-decoration: underline transparent;
+  transition: text-decoration;
+  transition-duration: 0.5s;
+}
+
+.navbar > a:hover {
+  text-decoration: underline solid;
+}

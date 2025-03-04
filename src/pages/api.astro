@@ -5,7 +5,7 @@ const apis = [
   {
     name: "Spotify Playback  API",
     description: "API para recuperar información de una playlist de spotify.",
-    endpoint: `${Astro.clientAddress}api/spotify`,
+    endpoint: `${Astro.request.headers.get('host')}/api/spotify`,
     method: "GET",
   },
 ];

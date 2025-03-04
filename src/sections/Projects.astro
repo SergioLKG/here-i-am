@@ -7,24 +7,31 @@ const projects = [
     title: "Proyecto 1",
     description: "Descripción del Proyecto 1",
     image: "/images/proyecto1.jpg",
+    tecnologias: ["javascript", "react"],
+    links: {
+      linkedin: "https://linkedin.com/in/usuario",
+      github: "https://github.com/usuario",
+    },
   },
   {
     title: "Proyecto 2",
     description: "Descripción del Proyecto 2",
     image: "/images/proyecto2.jpg",
+    tecnologias: ["python"],
+    links: {
+      twitter: "https://twitter.com/usuario",
+    },
   },
-  // Añade más proyectos según sea necesario
 ];
 ---
 
 <section
   id="projects"
-  class="flex flex-col justify-center items-center bg-gray-700 h-screen text-center"
+  class="flex flex-col justify-center items-center from-primary-a60 to-primary-a60 bg-gradient-to-b h-screen w-screen text-center section"
   data-title="Proyectos"
 >
-  <h2 class="mb-4 font-bold text-3xl">Proyectos</h2>
   <div
-    class="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mx-auto max-w-4xl"
+    class="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-screen-lg px-4"
   >
     {projects.map((project) => <Card {...project} />)}
   </div>
