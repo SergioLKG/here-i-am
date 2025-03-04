@@ -1,0 +1,84 @@
+/* ICONS LOGO */
+.bg-main-corpo {
+  margin: 0;
+  padding: 0;
+  background: url("../../assets/icons/LogoPositive.svg");
+  background-size: 15dvh;
+  background-color: transparent !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  opacity: 0.9;
+  z-index: -10;
+  user-select: none;
+  pointer-events: none;
+  animation: floatingBackground 75s cubic-bezier(0.42, 0, 0.58, 1) infinite, rotateBackground 2000s cubic-bezier(0.42, 0.2, 0.58, 0.8) infinite;
+  transition: all 1s 0.2s, background-size 1.24s, transform 1s 0.2s ease-out, width 0s, height 0s;
+}
+
+.bg-blur {
+  background: url("../../assets/images/blur.png");
+  background-size: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  z-index: -9;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Capa pseudo para patrones animados */
+.bg-main-corpo-before {
+  opacity: 0.3; 
+  z-index: -20; 
+  animation: pseudoMove 20s ease-in-out infinite;
+}
+
+.bg-main-logo-positive {
+  background-image: url("../../assets/icons/LogoPositive.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent !important;
+}
+
+.bg-main-logo-negative {
+  background-image: url("../../assets/icons/LogoNegative.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent !important;
+}
+
+.bg-logo-negative {
+  background-image: url("../../assets/icons/LogoNegative.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent !important;
+}
+.bg-logo-positive {
+  background-image: url("../../assets/icons/LogoPositive.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent !important;
+}
+.bg-logo-solid-negative {
+  background-image: url("../../assets/icons/LogoSolidNegative.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent !important;
+}
+.bg-logo-solid-positive {
+  background-image: url("../../assets/icons/LogoSolidPositive.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent !important;
+}
