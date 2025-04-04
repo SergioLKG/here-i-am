@@ -1,24 +1,37 @@
 {
-  "name": "hereiam",
+  "name": "sergio-dominguez-portfolio",
   "type": "module",
-  "license": "",
   "version": "0.0.1",
+  "private": true,
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/tailwind": "^5.1.2",
-    "@astrojs/vercel": "^7.8.2",
-    "astro": "^4.16.16",
-    "global": "^4.4.0",
-    "simple-icons": "^13.21.0",
-    "tailwindcss": "^3.4.14",
-    "vercel": "^37.14.0"
+    "@astrojs/react": "^3.0.10",
+    "@astrojs/sitemap": "^3.0.5",
+    "@astrojs/tailwind": "^5.1.0",
+    "@astrojs/upgrade": "^0.5.1",
+    "@astrojs/vercel": "^8.1.3",
+    "@radix-ui/themes": "^3.2.1",
+    "astro": "^4.3.5",
+    "lucide-react": "^0.323.0",
+    "prettier": "2.8.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "resend": "^4.1.2",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "^3.4.1",
+    "zod": "^3.24.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "@types/react": "^19.0.12",
+    "@types/react-dom": "^18.2.19",
+    "typescript": "^5.8.2",
+    "vite": "6.2.0"
+  }
 }

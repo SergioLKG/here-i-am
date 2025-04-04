@@ -1,31 +1,15 @@
 ---
-import Layout from "../layouts/BaseLayout.astro";
-// Sections
-import Home from "../sections/Home.astro";
-import About from "../sections/About.astro";
-import Projects from "../sections/Projects.astro";
-import Contact from "../sections/Contact.astro";
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero';
+import TechStack from '../components/TechStack';
+import Experience from '../components/Experience';
+import Projects from '../components/Projects';
+import Contact from '../components/Contact';
+import GitHubWidget from '../components/GitHubWidget';
+import SpotifyWidget from '../components/SpotifyWidget';
+
+const lang = 'es';
 ---
 
-<Layout title="Here I Am - Sergio Domínguez Pérez">
-  <Home />
-  <h2
-    class="absolute mx-auto mb-4 w-[100%] font-bold text-4xl text-center z-10"
-  >
-  <a href="#about" title="Experiencia Sergio Domínguez Pérez">
-    SOBRE MÍ</a>
-  </h2>
-  <About />
-  <h2
-    class="absolute mx-auto mb-4 w-[100%] font-bold text-3xl text-center z-10"
-  >
-    PROYECTOS
-  </h2>
-  <Projects />
-  <h2
-    class="absolute mx-auto mb-4 w-[100%] font-bold text-3xl text-center z-10"
-  >
-    CONTACTO
-  </h2>
-  <Contact />
-</Layout>
+<meta http-equiv="refresh" content={`0;url=/${lang}`} />
+
