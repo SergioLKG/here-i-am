@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import { Github, Linkedin, Mail, MapPin } from "lucide-react";
+"use client"
+
+import type React from "react"
+import { useState } from "react"
+import { Github, Linkedin, Mail, MapPin } from "lucide-react"
 
 interface ContactProps {
-  lang: "en" | "es";
+  lang: "en" | "es"
 }
 
 export default function Contact({ lang }: ContactProps) {
@@ -10,24 +13,22 @@ export default function Contact({ lang }: ContactProps) {
     name: "",
     email: "",
     message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState("");
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [error, setError] = useState("")
 
   const translations = {
     en: {
       title: "Get in Touch",
-      description:
-        "Have a project in mind or want to chat? Feel free to reach out!",
+      description: "Have a project in mind or want to chat? Feel free to reach out!",
       nameLabel: "Name",
       emailLabel: "Email",
       messageLabel: "Message",
       submitButton: "Send Message",
       submitting: "Sending...",
       successMessage: "Thanks for your message! I'll get back to you soon.",
-      errorMessage:
-        "There was an error sending your message. Please try again.",
+      errorMessage: "There was an error sending your message. Please try again.",
       contactInfo: "Contact Information",
       location: "Madrid, Spain",
       followMe: "Follow Me",
@@ -35,51 +36,69 @@ export default function Contact({ lang }: ContactProps) {
     },
     es: {
       title: "Ponte en Contacto",
-      description:
-        "¿Tienes un proyecto en mente o quieres charlar? ¡No dudes en contactarme!",
+      description: "¿Tienes un proyecto en mente o quieres charlar? ¡No dudes en contactarme!",
       nameLabel: "Nombre",
       emailLabel: "Correo Electrónico",
       messageLabel: "Mensaje",
       submitButton: "Enviar Mensaje",
       submitting: "Enviando...",
       successMessage: "¡Gracias por tu mensaje! Te responderé pronto.",
-      errorMessage:
-        "Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.",
+      errorMessage: "Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.",
       contactInfo: "Información de Contacto",
       location: "Madrid, España",
       followMe: "Sígueme",
       sendAnother: "Enviar Otro Mensaje",
     },
-  };
+  }
 
-  const t = translations[lang];
+  const t = translations[lang]
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError("");
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError("")
+
+    // Basic form validation
+    if (!formState.name.trim() || !formState.email.trim() || !formState.message.trim()) {
+      setError("All fields are required")
+      setIsSubmitting(false)
+      return
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(formState.email)) {
+      setError("Please enter a valid email address")
+      setIsSubmitting(false)
+      return
+    }
 
     try {
-      // Replace with actual form submission logic
-      const response = await fetch('/api/submit-contact', {
-        method: 'POST',
+      // Add timeout to prevent hanging requests
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 10000)
+
+      const response = await fetch("/api/submit-contact", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formState),
-      });
+        signal: controller.signal,
+      })
+
+      clearTimeout(timeoutId)
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.message || "Network response was not ok")
       }
 
       // Reset form
@@ -87,16 +106,20 @@ export default function Contact({ lang }: ContactProps) {
         name: "",
         email: "",
         message: "",
-      });
+      })
 
-      setIsSubmitted(true);
+      setIsSubmitted(true)
     } catch (err) {
-      setError(t.errorMessage);
-      console.error('Submission error:', err);
+      if (err.name === "AbortError") {
+        setError(t.errorMessage + " (Request timeout)")
+      } else {
+        setError(t.errorMessage)
+      }
+      console.error("Submission error:", err)
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <section className="py-12 md:py-24">
@@ -104,19 +127,15 @@ export default function Contact({ lang }: ContactProps) {
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                {t.title}
-              </h2>
-              <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">
-                {t.description}
-              </p>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t.title}</h2>
+              <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">{t.description}</p>
             </div>
 
             <div className="space-y-6 mt-6">
               <div>
                 <h3 className="text-xl font-bold mb-3">{t.contactInfo}</h3>
                 <div className="space-y-3">
-                  <a 
+                  <a
                     href="mailto:dominguezperezsergio03@gmail.com"
                     className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-primary"
                   >
@@ -133,7 +152,7 @@ export default function Contact({ lang }: ContactProps) {
               <div>
                 <h3 className="text-xl font-bold mb-3">{t.followMe}</h3>
                 <div className="flex gap-4">
-                  <a 
+                  <a
                     href="https://github.com/SergioLKG"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -142,7 +161,7 @@ export default function Contact({ lang }: ContactProps) {
                   >
                     <Github className="w-6 h-6" />
                   </a>
-                  <a 
+                  <a
                     href="https://www.linkedin.com/in/sergiodominguezperez/"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -167,12 +186,7 @@ export default function Contact({ lang }: ContactProps) {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold mb-2">{t.successMessage}</h3>
@@ -250,5 +264,5 @@ export default function Contact({ lang }: ContactProps) {
         </div>
       </div>
     </section>
-  );
+  )
 }

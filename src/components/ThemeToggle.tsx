@@ -4,9 +4,13 @@ import { useState, useEffect } from "react"
 import { Sun, Moon } from "lucide-react"
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(true)
+  const [isDark, setIsDark] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
+  // Only run on client side to prevent hydration mismatch
   useEffect(() => {
+    setMounted(true)
+
     // Initialize state based on localStorage or system preference
     const darkMode =
       localStorage.getItem("darkMode") === "true" ||
@@ -16,6 +20,9 @@ export default function ThemeToggle() {
   }, [])
 
   useEffect(() => {
+    // Only update DOM after component is mounted to prevent hydration mismatch
+    if (!mounted) return
+
     // Update the DOM when state changes
     if (isDark) {
       document.documentElement.classList.add("dark")
@@ -24,7 +31,36 @@ export default function ThemeToggle() {
       document.documentElement.classList.remove("dark")
       localStorage.setItem("darkMode", "false")
     }
-  }, [isDark])
+  }, [isDark, mounted])
+
+  // Add listener for system preference changes
+  useEffect(() => {
+    if (!mounted) return
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only update if user hasn't set a preference
+      if (localStorage.getItem("darkMode") === null) {
+        setIsDark(e.matches)
+      }
+    }
+
+    mediaQuery.addEventListener("change", handleChange)
+    return () => mediaQuery.removeEventListener("change", handleChange)
+  }, [mounted])
+
+  // Render placeholder during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <button
+        className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        aria-label="Toggle theme"
+      >
+        <div className="w-5 h-5" />
+      </button>
+    )
+  }
 
   return (
     <button
@@ -36,4 +72,3 @@ export default function ThemeToggle() {
     </button>
   )
 }
-

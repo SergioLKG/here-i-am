@@ -32,12 +32,12 @@ interface PlaylistTrack {
   spotifyUrl: string
 }
 
-export default function SpotifyWidget({ 
-  lang, 
-  clientId, 
-  clientSecret, 
+export default function SpotifyWidget({
+  lang,
+  clientId,
+  clientSecret,
   redirectUri,
-  fallbackPlaylistId 
+  fallbackPlaylistId,
 }: SpotifyWidgetProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [accessToken, setAccessToken] = useState("")
@@ -56,7 +56,7 @@ export default function SpotifyWidget({
       pause: "Pause",
       connect: "Connect Spotify",
       playPreview: "Play Preview",
-      pausePreview: "Pause Preview"
+      pausePreview: "Pause Preview",
     },
     es: {
       title: "Reproduciendo",
@@ -66,7 +66,7 @@ export default function SpotifyWidget({
       pause: "Pausar",
       connect: "Conectar Spotify",
       playPreview: "Reproducir Vista Previa",
-      pausePreview: "Pausar Vista Previa"
+      pausePreview: "Pausar Vista Previa",
     },
   }
 
@@ -75,42 +75,42 @@ export default function SpotifyWidget({
   // Obtener código de autorización
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code')
+    const code = urlParams.get("code")
 
     const exchangeCodeForToken = async (authCode: string) => {
-      const tokenEndpoint = 'https://accounts.spotify.com/api/token'
+      const tokenEndpoint = "https://accounts.spotify.com/api/token"
       const authString = btoa(`${clientId}:${clientSecret}`)
 
       try {
         const response = await fetch(tokenEndpoint, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Authorization': `Basic ${authString}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
+            Authorization: `Basic ${authString}`,
+            "Content-Type": "application/x-www-form-urlencoded",
           },
           body: new URLSearchParams({
-            grant_type: 'authorization_code',
+            grant_type: "authorization_code",
             code: authCode,
-            redirect_uri: redirectUri
-          })
+            redirect_uri: redirectUri,
+          }),
         })
 
         if (!response.ok) {
-          throw new Error('Token exchange failed')
+          throw new Error("Token exchange failed")
         }
 
         const tokenData = await response.json()
         setAccessToken(tokenData.access_token)
         setIsAuthenticated(true)
-        
+
         // Si hay playlist de respaldo, cargarla
         if (fallbackPlaylistId) {
           fetchPlaylistTracks(tokenData.access_token, fallbackPlaylistId)
         }
-        
+
         window.history.replaceState({}, document.title, window.location.pathname)
       } catch (error) {
-        console.error('Error exchanging code for token:', error)
+        console.error("Error exchanging code for token:", error)
         setAuthError(String(error))
       }
     }
@@ -120,43 +120,106 @@ export default function SpotifyWidget({
     }
   }, [clientId, clientSecret, redirectUri, fallbackPlaylistId])
 
-  // Obtener canción actual
+  // 1. Add proper cleanup for audio preview
   useEffect(() => {
-    const fetchCurrentTrack = async () => {
-      if (!accessToken) return
-
-      try {
-        const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`
-          }
-        })
-
-        if (response.status === 204) {
-          setCurrentTrack(null)
-          return
-        }
-
-        const data = await response.json()
-        
-        if (data.item) {
-          setCurrentTrack({
-            id: data.item.id,
-            title: data.item.name,
-            artist: data.item.artists.map((a: any) => a.name).join(', '),
-            albumArt: data.item.album.images[0]?.url || "/placeholder.svg?height=300&width=300",
-            duration: Math.floor(data.item.duration_ms / 1000),
-            progress: Math.floor(data.progress_ms / 1000),
-            isPlaying: data.is_playing,
-            previewUrl: data.item.preview_url,
-            spotifyUrl: data.item.external_urls.spotify
-          })
-        }
-      } catch (error) {
-        console.error('Error fetching current track:', error)
+    return () => {
+      if (previewAudio) {
+        previewAudio.pause()
+        setPreviewAudio(null)
       }
     }
+  }, [previewAudio])
 
+  // 2. Fix the token refresh logic by adding a refresh token handler
+  const refreshAccessToken = async (refreshToken: string) => {
+    try {
+      const tokenEndpoint = "https://accounts.spotify.com/api/token"
+      const authString = btoa(`${clientId}:${clientSecret}`)
+
+      const response = await fetch(tokenEndpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${authString}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "refresh_token",
+          refresh_token: refreshToken,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Token refresh failed")
+      }
+
+      const tokenData = await response.json()
+      setAccessToken(tokenData.access_token)
+
+      return tokenData.access_token
+    } catch (error) {
+      console.error("Error refreshing token:", error)
+      setAuthError(String(error))
+      return null
+    }
+  }
+
+  // 3. Improve error handling in fetchCurrentTrack
+  const fetchCurrentTrack = async () => {
+    if (!accessToken) return
+
+    try {
+      const response = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+
+      // Handle 401 Unauthorized (expired token)
+      if (response.status === 401) {
+        // Try to refresh the token from localStorage or other storage
+        const refreshToken = localStorage.getItem("spotify_refresh_token")
+        if (refreshToken) {
+          const newToken = await refreshAccessToken(refreshToken)
+          if (newToken) {
+            // Retry with new token
+            return fetchCurrentTrack()
+          }
+        }
+        setIsAuthenticated(false)
+        return
+      }
+
+      if (response.status === 204) {
+        setCurrentTrack(null)
+        return
+      }
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      if (data.item) {
+        setCurrentTrack({
+          id: data.item.id,
+          title: data.item.name,
+          artist: data.item.artists.map((a: any) => a.name).join(", "),
+          albumArt: data.item.album.images[0]?.url || "/placeholder.svg?height=300&width=300",
+          duration: Math.floor(data.item.duration_ms / 1000),
+          progress: Math.floor(data.progress_ms / 1000),
+          isPlaying: data.is_playing,
+          previewUrl: data.item.preview_url,
+          spotifyUrl: data.item.external_urls.spotify,
+        })
+      }
+    } catch (error) {
+      console.error("Error fetching current track:", error)
+    }
+  }
+
+  // Obtener canción actual
+  useEffect(() => {
     const intervalId = setInterval(fetchCurrentTrack, 10000)
     fetchCurrentTrack() // Llamada inicial inmediata
 
@@ -168,23 +231,23 @@ export default function SpotifyWidget({
     try {
       const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
 
       const data = await response.json()
       const tracks = data.items.map((item: any) => ({
         id: item.track.id,
         name: item.track.name,
-        artists: item.track.artists.map((a: any) => a.name).join(', '),
+        artists: item.track.artists.map((a: any) => a.name).join(", "),
         image: item.track.album.images[0]?.url || "/placeholder.svg?height=300&width=300",
         previewUrl: item.track.preview_url,
-        spotifyUrl: item.track.external_urls.spotify
+        spotifyUrl: item.track.external_urls.spotify,
       }))
 
       setFallbackTracks(tracks)
     } catch (error) {
-      console.error('Error fetching playlist tracks:', error)
+      console.error("Error fetching playlist tracks:", error)
     }
   }
 
@@ -199,7 +262,7 @@ export default function SpotifyWidget({
 
     if (!track.previewUrl) {
       // Abrir en Spotify si no hay preview
-      window.open(track.spotifyUrl, '_blank')
+      window.open(track.spotifyUrl, "_blank")
       return
     }
 
@@ -208,7 +271,7 @@ export default function SpotifyWidget({
     setPreviewAudio(audio)
     setIsPlayingPreview(true)
 
-    audio.addEventListener('ended', () => {
+    audio.addEventListener("ended", () => {
       setIsPlayingPreview(false)
       setPreviewAudio(null)
     })
@@ -216,17 +279,13 @@ export default function SpotifyWidget({
 
   // Iniciar flujo de autorización
   const initiateSpotifyAuth = () => {
-    const scopes = [
-      'user-read-currently-playing', 
-      'user-read-playback-state',
-      'playlist-read-private'
-    ].join(' ')
+    const scopes = ["user-read-currently-playing", "user-read-playback-state", "playlist-read-private"].join(" ")
 
-    const authUrl = new URL('https://accounts.spotify.com/authorize')
-    authUrl.searchParams.set('client_id', clientId)
-    authUrl.searchParams.set('response_type', 'code')
-    authUrl.searchParams.set('redirect_uri', redirectUri)
-    authUrl.searchParams.set('scope', scopes)
+    const authUrl = new URL("https://accounts.spotify.com/authorize")
+    authUrl.searchParams.set("client_id", clientId)
+    authUrl.searchParams.set("response_type", "code")
+    authUrl.searchParams.set("redirect_uri", redirectUri)
+    authUrl.searchParams.set("scope", scopes)
 
     window.location.href = authUrl.toString()
   }
@@ -242,7 +301,7 @@ export default function SpotifyWidget({
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-6">
         <p className="text-red-600">Error de autenticación: {authError}</p>
-        <button 
+        <button
           onClick={initiateSpotifyAuth}
           className="mt-4 w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
         >
@@ -256,10 +315,7 @@ export default function SpotifyWidget({
   if (!isAuthenticated) {
     return (
       <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm">
-        <button 
-          onClick={initiateSpotifyAuth}
-          className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
-        >
+        <button onClick={initiateSpotifyAuth} className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">
           {t.connect}
         </button>
       </div>
@@ -279,7 +335,7 @@ export default function SpotifyWidget({
           <div className="flex flex-col items-center">
             <div className="w-full max-w-[200px] aspect-square rounded-md overflow-hidden mb-4">
               <img
-                src={currentTrack.albumArt}
+                src={currentTrack.albumArt || "/placeholder.svg"}
                 alt={currentTrack.title}
                 className="w-full h-full object-cover"
                 loading="lazy"
@@ -288,17 +344,15 @@ export default function SpotifyWidget({
 
             <div className="w-full text-center mb-4">
               <h4 className="font-bold truncate">{currentTrack.title}</h4>
-              <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                {currentTrack.artist}
-              </p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{currentTrack.artist}</p>
             </div>
 
             <div className="w-full mb-2">
               <div className="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-green-500 rounded-full"
-                  style={{ 
-                    width: `${(currentTrack.progress / currentTrack.duration) * 100}%` 
+                  style={{
+                    width: `${(currentTrack.progress / currentTrack.duration) * 100}%`,
                   }}
                 ></div>
               </div>
@@ -310,7 +364,7 @@ export default function SpotifyWidget({
             </div>
 
             {currentTrack.previewUrl && (
-              <button 
+              <button
                 onClick={() => togglePreview(currentTrack)}
                 className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 flex items-center justify-center"
               >
@@ -330,14 +384,14 @@ export default function SpotifyWidget({
 
           <div className="grid grid-cols-2 gap-4">
             {fallbackTracks.slice(0, 4).map((track) => (
-              <div 
-                key={track.id} 
+              <div
+                key={track.id}
                 className="flex flex-col items-center cursor-pointer hover:opacity-80"
                 onClick={() => togglePreview(track)}
               >
-                <img 
-                  src={track.image} 
-                  alt={track.name} 
+                <img
+                  src={track.image || "/placeholder.svg"}
+                  alt={track.name}
                   className="w-full aspect-square rounded-md mb-2 object-cover"
                 />
                 <h4 className="text-sm font-bold truncate w-full text-center">{track.name}</h4>
