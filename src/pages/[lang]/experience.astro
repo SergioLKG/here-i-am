@@ -300,7 +300,7 @@ export const prerender = true;
       { threshold: 0.2 }
     );
 
-    progressBars.forEach((bar) => {
+    progressBars.forEach((bar:any) => {
       // Start with width 0
       bar.style.width = "0%";
       observer.observe(bar);
@@ -310,7 +310,7 @@ export const prerender = true;
   // Add class for animation
   document.addEventListener("astro:page-load", () => {
     const animatedElements = document.querySelectorAll(".animate-in");
-    animatedElements.forEach((el) => {
+    animatedElements.forEach((el:any) => {
       const targetWidth = el.getAttribute("data-width") || "0%";
       el.style.width = targetWidth;
     });
