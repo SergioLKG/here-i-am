@@ -1,0 +1,77 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: 'en' | 'es';
+}
+
+const { 
+  title, 
+  description = "Sergio Domínguez Pérez - Full-Stack Developer Portfolio", 
+  lang = "en" 
+} = Astro.props;
+
+const translations = {
+  en: {
+    home: "Home",
+    experience: "Experience",
+    projects: "Projects",
+    contact: "Contact",
+    switchLang: "Español"
+  },
+  es: {
+    home: "Inicio",
+    experience: "Experiencia",
+    projects: "Proyectos",
+    contact: "Contacto",
+    switchLang: "English"
+  }
+};
+
+const t = translations[lang];
+const altLang = lang === 'en' ? 'es' : 'en';
+const countryFlag = lang === 'en' ? "/icons/esp.svg" : "/icons/gbr.svg";
+const currentPath = Astro.url.pathname;
+const altPath = currentPath.replace(`/${lang}`, `/${altLang}`);
+export const prerender = true;
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <title>{title}</title>
+    <ViewTransitions />
+    <link rel="alternate" hreflang="en" href={`https://sergiodominguez.vercel.app/en${currentPath.replace(/^\/(en|es)/, '')}`} />
+    <link rel="alternate" hreflang="es" href={`https://sergiodominguez.vercel.app/es${currentPath.replace(/^\/(en|es)/, '')}`} />
+    <link rel="canonical" href={`https://sergiodominguez.vercel.app${currentPath}`} />
+  </head>
+  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+    <Header lang={lang} translations={t} altLang={altLang} altPath={altPath} countryFlag={countryFlag} />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    
+    <script>
+      const isDarkMode = localStorage.getItem('darkMode') === 'true' || 
+        (localStorage.getItem('darkMode') === null && 
+         window.matchMedia('(prefers-color-scheme: dark)').matches);
+      
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </body>
+</html>
+

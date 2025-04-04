@@ -1,0 +1,170 @@
+---
+import { Image } from "astro:assets";
+import { getProjects } from "@/components/Projects";
+import { ExternalLink, Github } from "lucide-react";
+
+interface Props {
+  t: any;
+  validLang: "es" | "en";
+  category: string | null;
+}
+
+const { t, validLang, category } = Astro.props;
+
+const projects = getProjects();
+const filteredProjects = category
+  ? projects.filter((project) => project.category === category)
+  : projects;
+---
+
+<div class="container px-4 md:px-6 py-12 md:py-24">
+  <div
+    class="flex flex-col items-center justify-center space-y-4 text-center mb-12"
+  >
+    <div class="space-y-2">
+      <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+        {t.pageTitle}
+      </h1>
+      <p class="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl">
+        {t.pageDescription}
+      </p>
+    </div>
+  </div>
+
+  <div class="mb-8">
+    <h2 class="text-lg font-medium mb-4">{t.categories}</h2>
+    <div class="flex flex-wrap gap-2">
+      <a
+        href={`/${validLang}/projects`}
+        class={`px-4 py-2 rounded-full ${!category ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+      >
+        {t.all}
+      </a>
+      <a
+        href={`/${validLang}/projects/web`}
+        class={`px-4 py-2 rounded-full ${category === "web" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+      >
+        {t.web}
+      </a>
+      <a
+        href={`/${validLang}/projects/mobile`}
+        class={`px-4 py-2 rounded-full ${category === "mobile" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+      >
+        {t.mobile}
+      </a>
+      <a
+        href={`/${validLang}/projects/backend`}
+        class={`px-4 py-2 rounded-full ${category === "backend" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+      >
+        {t.backend}
+      </a>
+    </div>
+  </div>
+  {
+    filteredProjects.length > 0 ? (
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {filteredProjects.map((project) => (
+          <div class="group relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm transition-all duration-300 hover:shadow-md transform hover:-translate-y-1">
+            <div class="aspect-video w-full overflow-hidden">
+              <Image
+                src={project.image || "/placeholder.svg"}
+                alt={project.title}
+                width="100"
+                height="100"
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="eager"
+              />
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold">{project.title}</h3>
+              <p class="mt-2 text-gray-500 dark:text-gray-400">
+                {project.description[validLang]}
+              </p>
+              <div class="mt-4">
+                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  {t.technologies}:
+                </h4>
+                <div class="mt-2 flex flex-wrap gap-2">
+                  {project.technologies.map((tech) => (
+                    <span class="inline-flex items-center rounded-full bg-gray-100 dark:bg-gray-800 px-2.5 py-0.5 text-xs font-medium">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              {project.githubUrl !== null && project.liveUrl !== null ? (
+                <div class="mt-6 flex items-center justify-between">
+                  {project.liveUrl !== null ? (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center text-sm font-medium text-primary hover:underline"
+                    >
+                      {t.viewProject}
+                      <ExternalLink className="ml-1 h-4 w-4" />
+                    </a>
+                  ) : (
+                    ""
+                  )}
+                  {project.githubUrl !== null ? (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                    >
+                      {t.viewCode}
+                      <Github className="ml-1 h-4 w-4" />
+                    </a>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="flex flex-col items-center justify-center min-h-[50vh] text-center space-y-6 p-8">
+        <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-xl shadow-md max-w-md w-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-24 w-24 mx-auto text-gray-400 dark:text-gray-600 mb-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
+            {category
+              ? `${t.noProjectsHere} ${t[category]}`
+              : `${t.noProjectsYet}`}
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
+            {category
+              ? `${t.noProjectsInCategory} ${t[category]}.`
+              : `${t.checkBackLater}`}
+          </p>
+          <div class="flex justify-center space-x-4">
+            <a
+              href={`/${validLang}/projects`}
+              class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+            >
+              {t.viewAllProjects}
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+  }
+</div>

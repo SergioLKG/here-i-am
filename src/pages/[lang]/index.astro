@@ -1,0 +1,81 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Hero from "@/components/Hero";
+import TechStack from "@/components/TechStack";
+import Experience from "@/components/Experience";
+import Projects from "@/components/Projects";
+import Contact from "@/components/Contact";
+import GitHubWidget from "@/components/GitHubWidget";
+import SpotifyWidget from "@/components/SpotifyWidget";
+
+const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
+const SPOTIFY_CLIENT_ID = import.meta.env.SPOTIFY_CLIENT_ID;
+const SPOTIFY_CLIENT_SECRET = import.meta.env.SPOTIFY_CLIENT_SECRET;
+const SPOTIFY_REDIRECT_URL = import.meta.env.SPOTIFY_REDIRECT_URL;
+const SPOTIFY_FALLBACK_PLAYLIST = import.meta.env.SPOTIFY_FALLBACK_PLAYLIST;
+
+const spotifyAuthStatus = Astro.url.searchParams.get("spotify_auth");
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
+}
+
+const { lang } = Astro.params;
+const validLang = lang === "en" || lang === "es" ? lang : "en";
+
+const translations = {
+  en: {
+    title: "Sergio Domínguez Pérez - Full-Stack Developer",
+    description:
+      "Portfolio of Sergio Domínguez Pérez, a Full-Stack Developer based in Madrid, Spain. Specializing in Symfony, WordPress, Astro, React, and more.",
+    widgets: "Widgets",
+  },
+  es: {
+    title: "Sergio Domínguez Pérez - Desarrollador Full-Stack",
+    description:
+      "Portafolio de Sergio Domínguez Pérez, Desarrollador Full-Stack ubicado en Madrid, España. Especializado en Symfony, WordPress, Astro, React y más.",
+    widgets: "Widgets",
+  },
+};
+
+const t = translations[validLang];
+export const prerender = true;
+---
+
+<Layout title={t.title} description={t.description} lang={validLang}>
+  <Hero lang={validLang} client:load />
+  <TechStack lang={validLang} client:load />
+  <Experience lang={validLang} client:load />
+  <Projects lang={validLang} client:load />
+
+  <section class="py-12 md:py-24 bg-gray-50 dark:bg-gray-800/50">
+    <div class="container px-4 md:px-6">
+      <div
+        class="flex flex-col items-center justify-center space-y-4 text-center mb-8"
+      >
+        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+          {t.widgets}
+        </h2>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-1">
+        <GitHubWidget
+          username="SergioLKG"
+          lang={validLang}
+          token={GITHUB_TOKEN}
+          client:load
+        />
+        <!-- <SpotifyWidget
+          client:load
+          lang="es"
+          clientId={SPOTIFY_CLIENT_ID}
+          clientSecret={SPOTIFY_CLIENT_SECRET}
+          redirectUri={SPOTIFY_REDIRECT_URL}
+          fallbackPlaylistId={SPOTIFY_FALLBACK_PLAYLIST}
+        /> -->
+      </div>
+    </div>
+  </section>
+
+  <Contact client:only="react" lang={validLang} />
+</Layout>

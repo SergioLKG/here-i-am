@@ -1,0 +1,63 @@
+---
+import ProjectsFilter from "@/components/ProjectsFilter.astro";
+import Layout from "@/layouts/Layout.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
+}
+
+const { lang } = Astro.params;
+const validLang = lang === "en" || lang === "es" ? lang : "en";
+
+export const translations = {
+  en: {
+    title: "Projects - Sergio Domínguez Pérez",
+    description:
+      "Portfolio of projects by Sergio Domínguez Pérez, a Full-Stack Developer based in Madrid, Spain.",
+    pageTitle: "All Projects",
+    pageDescription: "A collection of my work",
+    viewProject: "View Project",
+    viewCode: "View Code",
+    technologies: "Technologies",
+    categories: "Categories",
+    all: "All",
+    web: "Web",
+    mobile: "Mobile",
+    backend: "Backend",
+    noProjectsYet: "No projects yet",
+    noProjectsInCategory: "There are no projects in the",
+    noProjectsHere: "Nothing yet about",
+    checkBackLater: "Check back later for updates.",
+    viewAllProjects: "View All Projects",
+    projects: "projects",
+  },
+  es: {
+    title: "Proyectos - Sergio Domínguez Pérez",
+    description:
+      "Portafolio de proyectos de Sergio Domínguez Pérez, Desarrollador Full-Stack ubicado en Madrid, España.",
+    pageTitle: "Todos los Proyectos",
+    pageDescription: "Una colección de mi trabajo",
+    viewProject: "Ver Proyecto",
+    viewCode: "Ver Código",
+    technologies: "Tecnologías",
+    categories: "Categorías",
+    all: "Todos",
+    web: "Web",
+    mobile: "Móvil",
+    backend: "Backend",
+    noProjectsYet: "Aún no hay proyectos",
+    noProjectsInCategory: "No hay proyectos en la categoría",
+    noProjectsHere: "Nada aún sobre",
+    checkBackLater: "Vuelve más tarde para ver actualizaciones.",
+    viewAllProjects: "Ver Todos los Proyectos",
+    projects: "proyectos",
+  },
+};
+
+const t = translations[validLang];
+export const prerender = true;
+---
+
+<Layout title={t.title} description={t.description} lang={validLang}>
+  <ProjectsFilter t={t} validLang={validLang} category={null} />
+</Layout>

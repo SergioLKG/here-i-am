@@ -1,0 +1,18 @@
+---
+import ProjectsFilter from "@/components/ProjectsFilter.astro";
+import Layout from "@/layouts/Layout.astro";
+import { translations } from "../projects.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
+}
+
+const { lang } = Astro.params;
+const validLang = lang === "en" || lang === "es" ? lang : "en";
+
+const t = translations[validLang];
+---
+
+<Layout title={t.title} description={t.description} lang={validLang}>
+  <ProjectsFilter t={t} validLang={validLang} category="backend" />
+</Layout>
