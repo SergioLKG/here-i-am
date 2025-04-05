@@ -1,35 +1,46 @@
 // src/pages/api/contact.ts
-import type { APIRoute } from "astro"
-import { Resend } from "resend"
-import { z } from "zod"
+import type { APIRoute } from "astro";
+import { Resend } from "resend";
+import { z } from "zod";
 
 // Initialize Resend only if API key exists
-const resendApiKey = import.meta.env.RESEND_API_KEY
-const resend = resendApiKey ? new Resend(resendApiKey) : null
+const myEmail = import.meta.env.MY_EMAIL;
+const resendApiKey = import.meta.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
 // Validation schema using Zod
 const ContactSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }).max(100),
+  name: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters" })
+    .max(100),
   email: z.string().email({ message: "Invalid email address" }).max(100),
-  message: z.string().min(10, { message: "Message must be at least 10 characters" }).max(5000),
-})
+  message: z
+    .string()
+    .min(10, { message: "Message must be at least 10 characters" })
+    .max(5000),
+});
 
 // Simple in-memory rate limiting (should use Redis or similar in production)
-const ipRequests = new Map<string, { count: number; timestamp: number }>()
-const RATE_LIMIT = 5 // max requests
-const RATE_WINDOW = 60 * 60 * 1000 // 1 hour in ms
+const ipRequests = new Map<string, { count: number; timestamp: number }>();
+const RATE_LIMIT = 5; // max requests
+const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in ms
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
+    if (!myEmail) {
+      throw new Error("Email service not configured");
+    }
+
     // Rate limiting
-    const ip = clientAddress || "unknown"
-    const now = Date.now()
-    const ipData = ipRequests.get(ip) || { count: 0, timestamp: now }
+    const ip = clientAddress || "unknown";
+    const now = Date.now();
+    const ipData = ipRequests.get(ip) || { count: 0, timestamp: now };
 
     // Reset counter if window has passed
     if (now - ipData.timestamp > RATE_WINDOW) {
-      ipData.count = 0
-      ipData.timestamp = now
+      ipData.count = 0;
+      ipData.timestamp = now;
     }
 
     // Check if rate limited
@@ -45,27 +56,27 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
             "Content-Type": "application/json",
             "Retry-After": "3600",
           },
-        },
-      )
+        }
+      );
     }
 
     // Increment counter
-    ipData.count++
-    ipRequests.set(ip, ipData)
+    ipData.count++;
+    ipRequests.set(ip, ipData);
 
     // Parse and validate incoming data
-    const data = await request.json()
-    const validatedData = ContactSchema.parse(data)
+    const data = await request.json();
+    const validatedData = ContactSchema.parse(data);
 
     // Check if Resend is configured
     if (!resend) {
-      throw new Error("Email service not configured")
+      throw new Error("Email service not configured");
     }
 
     // Send email
     const emailResponse = await resend.emails.send({
       from: "Contact Form <onboarding@resend.dev>",
-      to: "dominguezperezsergio03@gmail.com", // Your personal email
+      to: myEmail,
       subject: "New Contact Form Submission",
       html: `
         <h1>New Contact Form Submission</h1>
@@ -74,11 +85,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         <p><strong>Message:</strong></p>
         <p>${validatedData.message}</p>
       `,
-    })
+    });
 
     // Check if email was sent successfully
     if (!emailResponse) {
-      throw new Error("Failed to send email")
+      throw new Error("Failed to send email");
     }
 
     // Successful response
@@ -90,8 +101,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       {
         status: 200,
         headers: { "Content-Type": "application/json" },
-      },
-    )
+      }
+    );
   } catch (error) {
     // Handle validation errors
     if (error instanceof z.ZodError) {
@@ -103,12 +114,12 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         {
           status: 400,
           headers: { "Content-Type": "application/json" },
-        },
-      )
+        }
+      );
     }
 
     // Log the error
-    console.error("Submission error:", error)
+    console.error("Submission error:", error);
 
     // Generic error response
     return new Response(
@@ -119,7 +130,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      },
-    )
+      }
+    );
   }
-}
+};
