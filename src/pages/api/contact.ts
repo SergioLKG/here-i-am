@@ -71,7 +71,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         <h1>New Contact Form Submission</h1>
         <p><strong>Name:</strong> ${validatedData.name}</p>
         <p><strong>Email:</strong> ${validatedData.email}</p>
-        Email:</strong> ${validatedData.email}</p>
         <p><strong>Message:</strong></p>
         <p>${validatedData.message}</p>
       `,
@@ -115,7 +114,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return new Response(
       JSON.stringify({
         error: "Failed to process submission",
-        message: error.message || "Unknown error",
+        message: error instanceof Error ? error.message : "Unknown error",
       }),
       {
         status: 500,
