@@ -19,7 +19,8 @@ export const emailTemplate = (validatedData: any): string => {
       <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e1e1e1; border-radius: 5px;">
         <!-- Header -->
         <div style="background-color: #4338ca; padding: 20px; border-radius: 5px 5px 0 0; text-align: center;">
-          <h1 style="color: #ffffff; margin: 0; font-size: 24px;">New Contact Form Submission</h1>
+          <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Here I Am</h1>
+          <p style="color: #cfcfcf; margin: 0; font-size: 14px;">(${document.location.hostname})</p>
         </div>
         
         <!-- Content -->
