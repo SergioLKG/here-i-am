@@ -18,8 +18,9 @@ export const emailTemplate = (validatedData: any): string => {
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 0;">
       <div style="max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e1e1e1; border-radius: 5px;">
         <!-- Header -->
-        <div style="background-color: #2010ca; padding: 20px; border-radius: 5px 5px 0 0; text-align: center;">
+        <div style="background-color: #4338ca; padding: 20px; border-radius: 5px 5px 0 0; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Here I Am</h1>
+          <p style="color: #cfcfcf; margin: 0; font-size: 14px;">(${document.location.hostname})</p>
         </div>
         
         <!-- Content -->
@@ -39,7 +40,7 @@ export const emailTemplate = (validatedData: any): string => {
                 <td style="padding: 10px 0; border-bottom: 1px solid #e1e1e1; font-size: 16px;">
                   <a href="mailto:${
                     validatedData.email
-                  }" style="color: #2010ca; text-decoration: none;">${
+                  }" style="color: #4338ca; text-decoration: none;">${
     validatedData.email
   }</a>
                 </td>
@@ -48,7 +49,7 @@ export const emailTemplate = (validatedData: any): string => {
           </div>
           
           <div style="margin-top: 20px;">
-            <h2 style="font-size: 18px; margin-top: 0; color: #2010ca; border-bottom: 1px solid #e1e1e1; padding-bottom: 10px;">Message:</h2>
+            <h2 style="font-size: 18px; margin-top: 0; color: #4338ca; border-bottom: 1px solid #e1e1e1; padding-bottom: 10px;">Message:</h2>
             <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px; white-space: pre-wrap; font-size: 16px;">${
               validatedData.message
             }</div>
@@ -57,7 +58,7 @@ export const emailTemplate = (validatedData: any): string => {
           <div style="margin-top: 30px; text-align: center;">
             <a href="mailto:${
               validatedData.email
-            }" style="display: inline-block; background-color: #2010ca; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px;">Reply to ${
+            }" style="display: inline-block; background-color: #4338ca; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 16px;">Reply to ${
     validatedData.name
   }</a>
           </div>
