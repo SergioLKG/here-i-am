@@ -69,6 +69,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const data = await request.json();
     const validatedData = ContactSchema.parse(data);
 
+    const emailHtml = emailTemplate(validatedData);
+
     // Check if Resend is configured
     if (!resend) {
       throw new Error("Email service not configured");
@@ -79,7 +81,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       from: "Contact Form <onboarding@resend.dev>",
       to: myEmail,
       subject: "HereIAm - Contact Form Submission",
-      html: emailTemplate(validatedData),
+      html: emailHtml,
     });
 
     // Check if email was sent successfully

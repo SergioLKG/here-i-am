@@ -20,7 +20,6 @@ export const emailTemplate = (validatedData: any): string => {
         <!-- Header -->
         <div style="background-color: #4338ca; padding: 20px; border-radius: 5px 5px 0 0; text-align: center;">
           <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Here I Am</h1>
-          <p style="color: #cfcfcf; margin: 0; font-size: 14px;">(${document.location.hostname})</p>
         </div>
         
         <!-- Content -->
