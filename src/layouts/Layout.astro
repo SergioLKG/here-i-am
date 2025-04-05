@@ -6,18 +6,17 @@ import '../styles/global.css';
 
 interface Props {
   title: string;
-  description?: string;
   lang?: 'en' | 'es';
 }
 
 const { 
   title, 
-  description = "Sergio Domínguez Pérez - Full-Stack Developer Portfolio", 
   lang = "en" 
 } = Astro.props;
 
 const translations = {
   en: {
+    description: "Sergio Domínguez Pérez is a Full-Stack Developer with experience in web and mobile application development. His portfolio includes notable projects that showcase his skills in technologies such as React, Node.js, and more. Explore his work and discover how he can help take your ideas to the next level.",
     home: "Home",
     experience: "Experience",
     projects: "Projects",
@@ -25,6 +24,7 @@ const translations = {
     switchLang: "Español"
   },
   es: {
+    description: "Sergio Domínguez Pérez es un desarrollador Full-Stack con experiencia en el desarrollo de aplicaciones web y móviles. Su portafolio incluye proyectos destacados que demuestran su habilidad en tecnologías como React, Node.js y más. Explora su trabajo y descubre cómo puede ayudar a llevar tus ideas al siguiente nivel.",
     home: "Inicio",
     experience: "Experiencia",
     projects: "Proyectos",
@@ -44,17 +44,42 @@ export const prerender = true;
 <!DOCTYPE html>
 <html lang={lang}>
   <head>
+    <title>{title}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={t.description} />
+    <!-- OG -->
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={t.description}>
+    <meta property="og:site_name" content="Sergio Domínguez Pérez - Full-Stack Developer Portfolio">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="http://www.sfidastudios.com">
+    <meta property="og:image" content="/images/hero.jpeg">
+    <meta property="og:image:alt" content="Sergio Domínguez Pérez - Full-Stack Developer Portfolio">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={t.description}>
+    <meta name="twitter:image" content="/images/hero.jpeg">
+    <meta name="twitter:creator" content="@sergiolkg">
+    <meta name="twitter:site" content="@sergiolkg">
+    <meta name="twitter:site:id" content="sergiolkg">
+    <meta name="twitter:creator:id" content="sergiolkg">
+    <meta name="twitter:image:alt" content="Sergio Domínguez Pérez - Full-Stack Developer Portfolio">
+    <!-- scripts -->
+    <ViewTransitions />
+    <!-- links -->
     <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" media="(prefers-color-scheme: light)">
     <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" media="(prefers-color-scheme: dark)">
-    <title>{title}</title>
-    <ViewTransitions />
     <link rel="alternate" hreflang="en" href={`https://sergiodominguez.vercel.app/en${currentPath.replace(/^\/(en|es)/, '')}`} />
     <link rel="alternate" hreflang="es" href={`https://sergiodominguez.vercel.app/es${currentPath.replace(/^\/(en|es)/, '')}`} />
     <link rel="canonical" href={`https://sergiodominguez.vercel.app${currentPath}`} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
     <Header lang={lang} translations={t} altLang={altLang} altPath={altPath} countryFlag={countryFlag} />
