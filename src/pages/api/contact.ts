@@ -2,6 +2,7 @@
 import type { APIRoute } from "astro";
 import { Resend } from "resend";
 import { z } from "zod";
+import { emailTemplate } from "@/templates/contact-form";
 
 // Initialize Resend only if API key exists
 const myEmail = import.meta.env.MY_EMAIL;
@@ -77,14 +78,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const emailResponse = await resend.emails.send({
       from: "Contact Form <onboarding@resend.dev>",
       to: myEmail,
-      subject: "New Contact Form Submission",
-      html: `
-        <h1>New Contact Form Submission</h1>
-        <p><strong>Name:</strong> ${validatedData.name}</p>
-        <p><strong>Email:</strong> ${validatedData.email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${validatedData.message}</p>
-      `,
+      subject: "HereIAm - Contact Form Submission",
+      html: emailTemplate(validatedData),
     });
 
     // Check if email was sent successfully
