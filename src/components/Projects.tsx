@@ -16,7 +16,7 @@ const projects = [
       en: "(Authorization needed in the Spotify API as this project is subject to the free development license) Create tierlists about your favorite Spotify playlists, and share them with your friends. You can see others' lists and vote for the ones you like the most.",
       es: "(Se necesita autorización en la API de Spotify ya que este proyecto esta sujeto a la licencia gratuita de desarrollo) Crea tierlist sobre tus playlists de Spotify favoritas, y compártelas con tus amigos. Puedes ver las listas de los demás y votar por las que más te gusten.",
     },
-    image: "/images/projects/tiermyspot/screenshot1.png",
+    image: "/images/projects/tiermyspot/screenshot.jpg",
     technologies: ["NextJS", "React", "Tailwind", "NeonPSQL", "PostsgreSQL", "Spotify API", "Vercel"],
     liveUrl: "https://tiermyspot.vercel.app/",
     githubUrl: "https://github.com/SergioLKG/tiermyspot",
