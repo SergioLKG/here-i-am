@@ -1,25 +1,48 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Github, Linkedin, Mail, FileText, ArrowRight } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Github, Linkedin, Mail, FileText, ArrowRight } from "lucide-react";
 
 interface HeroProps {
-  lang: "es" | "en"
+  lang: "es" | "en";
 }
 
 export default function Hero({ lang }: HeroProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  const [imageLoaded, setImageLoaded] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const images = [
+    {
+      src: "/images/hero2.webp",
+      alt: "Sergio Domínguez Pérez",
+    },
+    {
+      src: "/images/hero.jpeg",
+      alt: "Sergio Domínguez Pérez",
+    },
+  ];
 
   useEffect(() => {
     // Set visible immediately for better UX
-    setIsVisible(true)
+    setIsVisible(true);
 
-    // Preload the hero image
-    const img = new Image()
-    img.src = "/images/hero.jpeg"
-    img.onload = () => setImageLoaded(true)
-  }, [])
+    // Preload the hero images
+    const img1 = new Image();
+    img1.src = images[0].src;
+    const img2 = new Image();
+    img2.src = images[1].src;
+
+    img1.onload = img2.onload = () => setImageLoaded(true);
+
+    // Rotate images every 5 seconds
+    const interval = setInterval(() => {
+      setActiveImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 15000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
   const translations = {
     en: {
@@ -40,10 +63,13 @@ export default function Hero({ lang }: HeroProps) {
       contactMe: "Contáctame",
       downloadResume: "Descargar CV",
     },
-  }
+  };
 
-  const t = translations[lang]
-  const resumeLink = lang === "en" ? "/resume-sergio-dominguez-en.pdf" : "/resume-sergio-dominguez-es.pdf"
+  const t = translations[lang];
+  const resumeLink =
+    lang === "en"
+      ? "/resume-sergio-dominguez-en.pdf"
+      : "/resume-sergio-dominguez-es.pdf";
 
   return (
     <section className="relative overflow-hidden py-16 md:py-24 lg:py-32">
@@ -56,12 +82,19 @@ export default function Hero({ lang }: HeroProps) {
           >
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-                {t.greeting} <span className="text-primary">Sergio Domínguez</span>
+                {t.greeting}{" "}
+                <span className="text-primary">Sergio Domínguez</span>
               </h1>
-              <p className="text-xl text-gray-500 dark:text-gray-400 md:text-2xl">{t.role}</p>
-              <p className="text-base text-gray-500 dark:text-gray-400">{t.location}</p>
+              <p className="text-xl text-gray-500 dark:text-gray-400 md:text-2xl">
+                {t.role}
+              </p>
+              <p className="text-base text-gray-500 dark:text-gray-400">
+                {t.location}
+              </p>
             </div>
-            <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">{t.description}</p>
+            <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">
+              {t.description}
+            </p>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <a
                 href={`/${lang}/contact`}
@@ -111,23 +144,33 @@ export default function Hero({ lang }: HeroProps) {
           </div>
           <div
             className={`flex items-center justify-center transition-all duration-700 delay-200 ${
-              isVisible && imageLoaded ? "opacity-100 transform-none" : "opacity-0 translate-y-4"
+              isVisible && imageLoaded
+                ? "opacity-100 transform-none"
+                : "opacity-0 translate-y-4"
             }`}
           >
-            <div className="relative w-full max-w-sm overflow-hidden rounded-lg shadow-xl">
-              <img
-                src="/images/hero.jpeg"
-                alt="Sergio Domínguez Pérez"
-                width={400}
-                height={400}
-                className="w-full h-auto object-cover transition-transform duration-500 hover:scale-105"
-                loading="eager"
-                onLoad={() => setImageLoaded(true)}
-              />
+            <div className="relative w-full max-w-sm overflow-hidden rounded-lg shadow-xl aspect-[3/4] md:aspect-square">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-10"></div>
+              {images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image.src}
+                  alt={image.alt}
+                  width={400}
+                  height={400}
+                  className={`w-full h-full object-cover absolute inset-0 transition-all duration-1000 ease-in-out ${
+                    index === activeImageIndex
+                      ? "opacity-100 z-10"
+                      : "opacity-0 z-0"
+                  }`}
+                  loading="eager"
+                  onLoad={() => setImageLoaded(true)}
+                />
+              ))}
             </div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
