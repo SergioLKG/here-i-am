@@ -153,7 +153,7 @@ export default function Contact({ lang }: ContactProps) {
         // Handle specific validation errors from the server
         if (response.status === 400 && data.details) {
           const serverErrors: FormErrors = {};
-          data.details.forEach((error: any) => {
+          data.details.forEach((error: { path: (string | number)[]; message: string }) => {
             const path = error.path[0]; // Get field name from Zod error
             serverErrors[path as keyof FormErrors] = error.message;
           });
@@ -176,13 +176,14 @@ export default function Contact({ lang }: ContactProps) {
       });
 
       setIsSubmitted(true);
-    } catch (err: any) {
-      if (err.name === "AbortError") {
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      if (error.name === "AbortError") {
         setErrors({ general: t.errorMessage + " (Request timeout)" });
       } else {
-        setErrors({ general: err.message || t.errorMessage });
+        setErrors({ general: error.message || t.errorMessage });
       }
-      console.error("Submission error:", err);
+      console.error("Submission error:", error);
     } finally {
       setIsSubmitting(false);
     }

@@ -47,7 +47,7 @@ const experiences = [
         "Administración de bases de datos y optimización del rendimiento en MySQL.",
       ],
     },
-    skills: ["Symfony", "React", "TypeScript", "MySQL", "DevOps"],
+    skills: ["Symfony", "Astro", "React", "Vue", "TypeScript", "MySQL", "DevOps", "AI Integration", "API Development", "Microservices", "Performance Optimization WPO"],
   },
   {
     active: false,

@@ -43,10 +43,10 @@ export const prerender = true;
 ---
 
 <Layout title={t.title} description={t.description} lang={validLang}>
-  <Hero lang={validLang} client:load />
-  <TechStack lang={validLang} client:load />
-  <Experience lang={validLang} client:load />
-  <Projects lang={validLang} client:load />
+  <Hero lang={validLang} client:idle />
+  <TechStack lang={validLang} client:visible />
+  <Experience lang={validLang} client:visible />
+  <Projects lang={validLang} client:visible />
 
   <section class="py-12 md:py-24 bg-gray-50 dark:bg-gray-800/50">
     <div class="container px-4 md:px-6">
@@ -63,7 +63,7 @@ export const prerender = true;
           username="SergioLKG"
           lang={validLang}
           token={GITHUB_TOKEN}
-          client:load
+          client:visible
         />
         <!-- <SpotifyWidget
           client:load

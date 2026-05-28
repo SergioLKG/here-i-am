@@ -204,7 +204,7 @@ export default function SpotifyWidget({
         setCurrentTrack({
           id: data.item.id,
           title: data.item.name,
-          artist: data.item.artists.map((a: any) => a.name).join(", "),
+          artist: data.item.artists.map((a: { name: string }) => a.name).join(", "),
           albumArt: data.item.album.images[0]?.url || "/placeholder.svg?height=300&width=300",
           duration: Math.floor(data.item.duration_ms / 1000),
           progress: Math.floor(data.progress_ms / 1000),
@@ -236,10 +236,10 @@ export default function SpotifyWidget({
       })
 
       const data = await response.json()
-      const tracks = data.items.map((item: any) => ({
+      const tracks = data.items.map((item: { track: { id: string; name: string; artists: { name: string }[]; album: { images: { url: string }[] }; preview_url: string | null; external_urls: { spotify: string } } }) => ({
         id: item.track.id,
         name: item.track.name,
-        artists: item.track.artists.map((a: any) => a.name).join(", "),
+        artists: item.track.artists.map((a: { name: string }) => a.name).join(", "),
         image: item.track.album.images[0]?.url || "/placeholder.svg?height=300&width=300",
         previewUrl: item.track.preview_url,
         spotifyUrl: item.track.external_urls.spotify,

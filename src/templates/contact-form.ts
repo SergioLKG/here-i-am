@@ -1,4 +1,10 @@
-export const emailTemplate = (validatedData: any): string => {
+interface ValidatedContactData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export const emailTemplate = (validatedData: ValidatedContactData): string => {
   return `<!DOCTYPE html>
     <html>
     <head>

@@ -75,7 +75,7 @@ export default function GitHubWidget({
         );
         const reposData = await reposResponse.json();
 
-        const totalStars = reposData.reduce((acc:any, repo:any) => acc + repo.stargazers_count, 0);
+        const totalStars = reposData.reduce((acc: number, repo: { stargazers_count: number }) => acc + repo.stargazers_count, 0);
 
         const eventsResponse = await fetch(
           `https://api.github.com/users/${username}/events`, 
@@ -85,7 +85,7 @@ export default function GitHubWidget({
 
         // Count push events as a proxy for contributions
         const contributions = eventsData.filter(
-          (event:any) => event.type === 'PushEvent'
+          (event: { type: string }) => event.type === 'PushEvent'
         ).length;
 
         setData({
