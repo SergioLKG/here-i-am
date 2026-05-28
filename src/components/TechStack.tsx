@@ -31,7 +31,15 @@ export default function TechStack({ lang }: TechStackProps) {
 
   const T = i18n(lang)
 
-  // Group technologies by category for better organization
+  const categoryLabels: Record<string, string> = {
+    backend: lang === "en" ? "Backend" : "Backend",
+    frontend: lang === "en" ? "Frontend" : "Frontend",
+    language: lang === "en" ? "Language" : "Lenguaje",
+    database: lang === "en" ? "Database" : "Base de datos",
+    cms: "CMS",
+    tools: lang === "en" ? "Tools" : "Herramientas",
+  }
+
   const technologies = [
     { name: "Symfony", icon: "/icons/symfony.svg", category: "backend" },
     { name: "WordPress", icon: "/icons/wordpress.svg", category: "cms" },
@@ -62,6 +70,7 @@ export default function TechStack({ lang }: TechStackProps) {
           {technologies.map((tech, index) => (
             <div
               key={tech.name}
+              title={tech.name + " (" + categoryLabels[tech.category] + ")"}
               className="flex flex-col items-center justify-center p-4 bg-white dark:bg-gray-900 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
               style={{
                 transitionDelay: `${index * 50}ms`,

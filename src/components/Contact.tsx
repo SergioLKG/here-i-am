@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
-import { Github, Linkedin, Mail, MapPin } from "lucide-react"
+import { useState, useCallback } from "react"
+import { Github, Linkedin, Mail, MapPin, Copy, Check } from "lucide-react"
 import { t as i18n } from "@/lib/i18n"
 
 interface ContactProps {
@@ -27,6 +27,13 @@ export default function Contact({ lang }: ContactProps) {
   const [errors, setErrors] = useState<FormErrors>({})
 
   const T = i18n(lang)
+  const [copied, setCopied] = useState(false)
+
+  const copyEmail = useCallback(() => {
+    navigator.clipboard.writeText("dominguezperezsergio03@gmail.com")
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }, [])
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -159,13 +166,17 @@ export default function Contact({ lang }: ContactProps) {
               <div>
                 <h3 className="text-xl font-bold mb-3">{T.contact.contactInfo}</h3>
                 <div className="space-y-3">
-                  <a
-                    href="mailto:dominguezperezsergio03@gmail.com"
-                    className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-primary"
-                  >
-                    <Mail className="h-5 w-5" />
-                    <span>dominguezperezsergio03@gmail.com</span>
-                  </a>
+                  <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                    <Mail className="h-5 w-5 shrink-0" />
+                    <span className="truncate">dominguezperezsergio03@gmail.com</span>
+                    <button
+                      onClick={copyEmail}
+                      aria-label="Copy email"
+                      className="inline-flex items-center justify-center rounded-md p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                    </button>
+                  </div>
                   <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                     <MapPin className="h-5 w-5" />
                     <span>{T.contact.location}</span>

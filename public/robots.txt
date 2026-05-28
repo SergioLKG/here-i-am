@@ -2,4 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://sergiodominguez.vercel.app/sitemap-index.xml
-
