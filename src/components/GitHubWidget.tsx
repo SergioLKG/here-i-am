@@ -2,17 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { Github, GitCommit, Star } from "lucide-react";
+import { t as i18n } from "@/lib/i18n";
 
 interface GitHubWidgetProps {
   username: string;
   lang: "es" | "en";
-  token?: string;
 }
 
 export default function GitHubWidget({ 
   username, 
-  lang, 
-  token 
+  lang
 }: GitHubWidgetProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -23,30 +22,7 @@ export default function GitHubWidget({
     stars: 0,
   });
 
-  const translations = {
-    en: {
-      title: "GitHub Activity",
-      repos: "Repositories",
-      followers: "Followers",
-      contributions: "Contributions",
-      stars: "Stars",
-      viewProfile: "View GitHub Profile",
-      loading: "Loading GitHub data...",
-      error: "Failed to load GitHub data",
-    },
-    es: {
-      title: "Actividad de GitHub",
-      repos: "Repositorios",
-      followers: "Seguidores",
-      contributions: "Contribuciones",
-      stars: "Estrellas",
-      viewProfile: "Ver Perfil de GitHub",
-      loading: "Cargando datos de GitHub...",
-      error: "Error al cargar datos de GitHub",
-    },
-  };
-
-  const t = translations[lang];
+  const T = i18n(lang);
 
   useEffect(() => {
     const fetchGitHubData = async () => {
@@ -54,56 +30,24 @@ export default function GitHubWidget({
         setIsLoading(true);
         setError("");
 
-        const headers: HeadersInit = token 
-          ? { 'Authorization': `token ${token}` } 
-          : {};
+        const response = await fetch(`/api/github?username=${username}`);
 
-        const userResponse = await fetch(
-          `https://api.github.com/users/${username}`, 
-          { headers }
-        );
-
-        if (!userResponse.ok) {
-          throw new Error(`GitHub API error: ${userResponse.status}`);
+        if (!response.ok) {
+          throw new Error(`GitHub API error: ${response.status}`);
         }
 
-        const userData = await userResponse.json();
-
-        const reposResponse = await fetch(
-          `https://api.github.com/users/${username}/repos`, 
-          { headers }
-        );
-        const reposData = await reposResponse.json();
-
-        const totalStars = reposData.reduce((acc: number, repo: { stargazers_count: number }) => acc + repo.stargazers_count, 0);
-
-        const eventsResponse = await fetch(
-          `https://api.github.com/users/${username}/events`, 
-          { headers }
-        );
-        const eventsData = await eventsResponse.json();
-
-        // Count push events as a proxy for contributions
-        const contributions = eventsData.filter(
-          (event: { type: string }) => event.type === 'PushEvent'
-        ).length;
-
-        setData({
-          repos: userData.public_repos,
-          followers: userData.followers,
-          contributions,
-          stars: totalStars
-        });
+        const result = await response.json();
+        setData(result);
       } catch (err) {
         console.error("Error fetching GitHub data:", err);
-        setError(t.error);
+        setError(T.githubWidget.error);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchGitHubData();
-  }, [username, token, t.error]);
+  }, [username, T.githubWidget.error]);
 
   // Resto del componente permanece igual al código original
   if (isLoading) {
@@ -113,7 +57,7 @@ export default function GitHubWidget({
           <div className="flex flex-col items-center gap-2">
             <Github className="h-8 w-8 animate-pulse" />
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {t.loading}
+              {T.githubWidget.loading}
             </p>
           </div>
         </div>
@@ -150,7 +94,7 @@ export default function GitHubWidget({
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-bold">{t.title}</h3>
+        <h3 className="text-lg font-bold">{T.githubWidget.title}</h3>
         <Github className="h-5 w-5" />
       </div>
 
@@ -159,7 +103,7 @@ export default function GitHubWidget({
           <Github className="h-6 w-6 mb-2" />
           <span className="text-2xl font-bold">{data.repos}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {t.repos}
+            {T.githubWidget.repos}
           </span>
         </div>
         <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
@@ -179,21 +123,21 @@ export default function GitHubWidget({
           </svg>
           <span className="text-2xl font-bold">{data.followers}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {t.followers}
+            {T.githubWidget.followers}
           </span>
         </div>
         <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <GitCommit className="h-6 w-6 mb-2" />
           <span className="text-2xl font-bold">{data.contributions}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {t.contributions}
+            {T.githubWidget.contributions}
           </span>
         </div>
         <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
           <Star className="h-6 w-6 mb-2" />
           <span className="text-2xl font-bold">{data.stars}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">
-            {t.stars}
+            {T.githubWidget.stars}
           </span>
         </div>
       </div>
@@ -204,7 +148,7 @@ export default function GitHubWidget({
         rel="noopener noreferrer"
         className="inline-flex w-full items-center justify-center rounded-md bg-gray-900 dark:bg-gray-700 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors"
       >
-        {t.viewProfile}
+        {T.githubWidget.viewProfile}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4 ml-1"

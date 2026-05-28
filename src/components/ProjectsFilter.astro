@@ -2,14 +2,15 @@
 import { Image } from "astro:assets";
 import { getProjects } from "@/components/Projects";
 import { ExternalLink, Github } from "lucide-react";
+import { t as i18n } from "@/lib/i18n";
 
 interface Props {
-  t: any;
   validLang: "es" | "en";
   category: string | null;
 }
 
-const { t, validLang, category } = Astro.props;
+const { validLang, category } = Astro.props;
+const T = i18n(validLang);
 
 const projects = getProjects();
 const filteredProjects = category
@@ -23,40 +24,40 @@ const filteredProjects = category
   >
     <div class="space-y-2">
       <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-        {t.pageTitle}
+        {T.projectsPage.pageTitle}
       </h1>
       <p class="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl">
-        {t.pageDescription}
+        {T.projectsPage.pageDescription}
       </p>
     </div>
   </div>
 
   <div class="mb-8">
-    <h2 class="text-lg font-medium mb-4">{t.categories}</h2>
+    <h2 class="text-lg font-medium mb-4">{T.projectsPage.categories}</h2>
     <div class="flex flex-wrap gap-2">
       <a
         href={`/${validLang}/projects`}
         class={`px-4 py-2 rounded-full ${!category ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
       >
-        {t.all}
+        {T.projectsPage.all}
       </a>
       <a
         href={`/${validLang}/projects/web`}
         class={`px-4 py-2 rounded-full ${category === "web" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
       >
-        {t.web}
+        {T.projectsPage.web}
       </a>
       <a
         href={`/${validLang}/projects/mobile`}
         class={`px-4 py-2 rounded-full ${category === "mobile" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
       >
-        {t.mobile}
+        {T.projectsPage.mobile}
       </a>
       <a
         href={`/${validLang}/projects/backend`}
         class={`px-4 py-2 rounded-full ${category === "backend" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
       >
-        {t.backend}
+        {T.projectsPage.backend}
       </a>
     </div>
   </div>
@@ -82,7 +83,7 @@ const filteredProjects = category
               </p>
               <div class="mt-4">
                 <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  {t.technologies}:
+                  {T.projectsPage.technologies}:
                 </h4>
                 <div class="mt-2 flex flex-wrap gap-2">
                   {project.technologies.map((tech) => (
@@ -101,7 +102,7 @@ const filteredProjects = category
                       rel="noopener noreferrer"
                       class="inline-flex items-center text-sm font-medium text-primary hover:underline"
                     >
-                      {t.viewProject}
+                      {T.projectsPage.viewProject}
                       <ExternalLink className="ml-1 h-4 w-4" />
                     </a>
                   ) : (
@@ -114,7 +115,7 @@ const filteredProjects = category
                       rel="noopener noreferrer"
                       class="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
                     >
-                      {t.viewCode}
+                      {T.projectsPage.viewCode}
                       <Github className="ml-1 h-4 w-4" />
                     </a>
                   ) : (
@@ -147,20 +148,20 @@ const filteredProjects = category
           </svg>
           <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">
             {category
-              ? `${t.noProjectsHere} ${t[category]}`
-              : `${t.noProjectsYet}`}
+              ? `${T.projectsPage.noProjectsHere} ${T.projectsPage[category as keyof typeof T.projectsPage]}`
+              : `${T.projectsPage.noProjectsYet}`}
           </h2>
           <p class="text-gray-600 dark:text-gray-400 mb-6">
             {category
-              ? `${t.noProjectsInCategory} ${t[category]}.`
-              : `${t.checkBackLater}`}
+              ? `${T.projectsPage.noProjectsInCategory} ${T.projectsPage[category as keyof typeof T.projectsPage]}.`
+              : `${T.projectsPage.checkBackLater}`}
           </p>
           <div class="flex justify-center space-x-4">
             <a
               href={`/${validLang}/projects`}
               class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
             >
-              {t.viewAllProjects}
+              {T.projectsPage.viewAllProjects}
             </a>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { ViewTransitions } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
+import { t as i18n } from "@/lib/i18n";
 
 interface Props {
   title: string;
@@ -13,28 +14,11 @@ interface Props {
 
 const {
   title,
+  description,
   lang = "en",
-  description = "Sergio Domínguez Pérez es un desarrollador Full-Stack con experiencia en el desarrollo de aplicaciones web y móviles. Su portafolio incluye proyectos destacados que demuestran su habilidad en tecnologías como React, Node.js y más. Explora su trabajo y descubre cómo puede ayudar a llevar tus ideas al siguiente nivel.",
 } = Astro.props;
 
-const translations = {
-  en: {
-    home: "Home",
-    experience: "Experience",
-    projects: "Projects",
-    contact: "Contact",
-    switchLang: "Español",
-  },
-  es: {
-    home: "Inicio",
-    experience: "Experiencia",
-    projects: "Proyectos",
-    contact: "Contacto",
-    switchLang: "English",
-  },
-};
-
-const t = translations[lang];
+const T = i18n(lang);
 const altLang = lang === "en" ? "es" : "en";
 const countryFlag = lang === "en" ? "/icons/esp.svg" : "/icons/gbr.svg";
 const currentPath = Astro.url.pathname;
@@ -59,8 +43,8 @@ export const prerender = true;
     <meta name="keywords" content="Sergio Domínguez Pérez, Full-Stack Developer, Portfolio, programador, programador españa, nodejs, react, angular, php, symfony, wordpress, tailwind, bootstrap, " />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://www.sergiodominguez.vercel.app" />
-    <meta property="og:image" content="https://sergiodominguez.vercel.app/screenshot.jpg" />
+    <meta property="og:url" content={new URL(currentPath, Astro.site).href} />
+    <meta property="og:image" content={new URL("/screenshot.jpg", Astro.site).href} />
     <meta
       property="og:image:alt"
       content="Sergio Domínguez Pérez - Full-Stack Developer Portfolio"
@@ -72,7 +56,7 @@ export const prerender = true;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content="https://sergiodominguez.vercel.app/screenshot.jpeg" />
+    <meta name="twitter:image" content={new URL("/screenshot.jpg", Astro.site).href} />
     <meta name="twitter:creator" content="@sergiolkg" />
     <meta name="twitter:site" content="@sergiolkg" />
     <meta name="twitter:site:id" content="sergiolkg" />
@@ -99,25 +83,43 @@ export const prerender = true;
     <link
       rel="alternate"
       hreflang="en"
-      href={`https://sergiodominguez.vercel.app/en${currentPath.replace(/^\/(en|es)/, "")}`}
+      href={new URL(`/en${currentPath.replace(/^\/(en|es)/, "")}`, Astro.site).href}
     />
     <link
       rel="alternate"
       hreflang="es"
-      href={`https://sergiodominguez.vercel.app/es${currentPath.replace(/^\/(en|es)/, "")}`}
+      href={new URL(`/es${currentPath.replace(/^\/(en|es)/, "")}`, Astro.site).href}
     />
     <link
       rel="canonical"
-      href={`https://sergiodominguez.vercel.app${currentPath}`}
+      href={new URL(currentPath, Astro.site).href}
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      name: "Sergio Domínguez Pérez",
+      url: new URL(currentPath, Astro.site).href,
+      image: new URL("/screenshot.jpg", Astro.site).href,
+      jobTitle: "Full-Stack Developer",
+      sameAs: [
+        "https://github.com/SergioLKG",
+        "https://www.linkedin.com/in/sergiodominguezperez/"
+      ],
+      knowsAbout: ["Web Development", "Mobile Development", "Full-Stack Development", "React", "Node.js", "TypeScript", "Symfony", "WordPress"],
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Madrid",
+        addressCountry: "ES"
+      }
+    })} />
   </head>
   <body
     class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col"
   >
     <Header
       lang={lang}
-      translations={t}
+      translations={T.nav}
       altLang={altLang}
       altPath={altPath}
       countryFlag={countryFlag}

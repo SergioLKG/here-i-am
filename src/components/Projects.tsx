@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ExternalLink, Github } from "lucide-react";
+import { t as i18n } from "@/lib/i18n";
 
 interface ProjectsProps {
   lang: "es" | "en";
@@ -58,28 +59,7 @@ export default function Projects({ lang }: ProjectsProps) {
     return () => observer.disconnect();
   }, []);
 
-  const translations = {
-    en: {
-      title: "Featured Projects",
-      description: "A selection of my recent work",
-      viewProject: "View Project",
-      viewCode: "View Code",
-      loadMore: "Load More",
-      viewAll: "View All Projects",
-      technologies: "Technologies",
-    },
-    es: {
-      title: "Proyectos Destacados",
-      description: "Una selección de mi trabajo reciente",
-      viewProject: "Ver Proyecto",
-      viewCode: "Ver Código",
-      loadMore: "Cargar Más",
-      viewAll: "Ver Todos los Proyectos",
-      technologies: "Tecnologías",
-    },
-  };
-
-  const t = translations[lang];
+  const T = i18n(lang);
 
   const loadMore = () => {
     setVisibleProjects((prev) => Math.min(prev + 3, projects.length));
@@ -91,10 +71,10 @@ export default function Projects({ lang }: ProjectsProps) {
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              {t.title}
+              {T.projects.title}
             </h2>
             <p className="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl">
-              {t.description}
+              {T.projects.description}
             </p>
           </div>
         </div>
@@ -123,7 +103,7 @@ export default function Projects({ lang }: ProjectsProps) {
                 </p>
                 <div className="mt-4">
                   <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                    {t.technologies}:
+                    {T.projects.technologies}:
                   </h4>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {project.technologies.map((tech) => (
@@ -144,7 +124,7 @@ export default function Projects({ lang }: ProjectsProps) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center text-sm font-medium text-primary hover:underline"
                     >
-                      {t.viewProject}
+                      {T.projects.viewProject}
                       <ExternalLink className="ml-1 h-4 w-4" />
                     </a>
                   ) : (
@@ -157,7 +137,7 @@ export default function Projects({ lang }: ProjectsProps) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
                     >
-                      {t.viewCode}
+                      {T.projects.viewCode}
                       <Github className="ml-1 h-4 w-4" />
                     </a>
                   ) : (
@@ -175,7 +155,7 @@ export default function Projects({ lang }: ProjectsProps) {
               onClick={loadMore}
               className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
-              {t.loadMore}
+              {T.projects.loadMore}
             </button>
           </div>
         )}
@@ -185,7 +165,7 @@ export default function Projects({ lang }: ProjectsProps) {
             href={`/${lang}/projects`}
             className="inline-flex items-center text-primary hover:underline"
           >
-            {t.viewAll}
+            {T.projects.viewAll}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 ml-1"

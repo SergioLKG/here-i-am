@@ -1,7 +1,7 @@
 ---
 import ProjectsFilter from "@/components/ProjectsFilter.astro";
 import Layout from "@/layouts/Layout.astro";
-import { translations } from "../projects.astro";
+import { t as i18n } from "@/lib/i18n";
 
 export function getStaticPaths() {
   return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
@@ -10,10 +10,10 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const validLang = lang === "en" || lang === "es" ? lang : "en";
 
-const t = translations[validLang];
+const T = i18n(validLang);
 export const prerender = true;
 ---
 
-<Layout title={t.title} description={t.description} lang={validLang}>
-  <ProjectsFilter t={t} validLang={validLang} category="web" />
+<Layout title={T.projectsPage.title} description={T.projectsPage.description} lang={validLang}>
+  <ProjectsFilter validLang={validLang} category="web" />
 </Layout>

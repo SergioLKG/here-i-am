@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ContactComponent from '@/components/Contact';
+import { t as i18n } from "@/lib/i18n";
 
 export function getStaticPaths() {
   return [
@@ -12,22 +13,11 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const validLang = lang === 'en' || lang === 'es' ? lang : 'en';
 
-const translations = {
-  en: {
-    title: "Contact - Sergio Domínguez Pérez",
-    description: "Get in touch with Sergio Domínguez Pérez, a Full-Stack Developer based in Madrid, Spain."
-  },
-  es: {
-    title: "Contacto - Sergio Domínguez Pérez",
-    description: "Ponte en contacto con Sergio Domínguez Pérez, Desarrollador Full-Stack ubicado en Madrid, España."
-  }
-};
-
-const t = translations[validLang];
+const T = i18n(validLang);
 export const prerender = true;
 ---
 
-<Layout title={t.title} description={t.description} lang={validLang}>
+<Layout title={T.contactPage.title} description={T.contactPage.description} lang={validLang}>
   <ContactComponent lang={validLang} client:load />
 </Layout>
 

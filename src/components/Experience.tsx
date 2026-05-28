@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Calendar, MapPin, Briefcase } from "lucide-react"
+import { t as i18n } from "@/lib/i18n"
 
 interface ExperienceProps {
   lang: "es" | "en"
@@ -163,29 +164,14 @@ export default function Experience({ lang }: ExperienceProps) {
     return () => observer.disconnect()
   }, [])
 
-  const translations = {
-    en: {
-      title: "Professional Experience",
-      viewAll: "View All Experience",
-      present: "Present",
-      skills: "Skills",
-    },
-    es: {
-      title: "Experiencia Profesional",
-      viewAll: "Ver Toda la Experiencia",
-      present: "Actual",
-      skills: "Habilidades",
-    },
-  }
-
-  const t = translations[lang]
+  const T = i18n(lang)
 
   return (
     <section id="experience-section" className="py-12 md:py-24">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t.title}</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{T.experience.title}</h2>
           </div>
         </div>
 
@@ -262,7 +248,7 @@ export default function Experience({ lang }: ExperienceProps) {
             </div>
 
             <div className="mt-6">
-              <h4 className="font-medium mb-2">{t.skills}:</h4>
+              <h4 className="font-medium mb-2">{T.experience.skills}:</h4>
               <div className="flex flex-wrap gap-2">
                 {experiences[activeExperience].skills.map((skill) => (
                   <span key={skill} className="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm">
@@ -276,7 +262,7 @@ export default function Experience({ lang }: ExperienceProps) {
 
         <div className="mt-12 text-center">
           <a href={`/${lang}/experience`} className="inline-flex items-center text-primary hover:underline">
-            {t.viewAll}
+            {T.experience.viewAll}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4 ml-1"

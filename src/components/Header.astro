@@ -68,8 +68,8 @@ const resumeLink =
           src={countryFlag}
           alt=""
           class="icon w-4 h-3 border align-middle self-center ml-2 my-auto shadow-[0px_0px_1px_white]"
-          width="640"
-          height="480"
+          width="16"
+          height="12"
           loading="lazy"
         />
       </a>
@@ -77,7 +77,7 @@ const resumeLink =
     </nav>
     <div class="flex md:hidden items-center gap-4">
       <ThemeToggle client:load />
-      <button id="mobile-menu-toggle" aria-label="Toggle menu" class="p-2">
+      <button id="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" class="p-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -161,13 +161,14 @@ const resumeLink =
 </header>
 
 <script>
-  // Mobile menu toggle
   const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
   const mobileMenu = document.getElementById("mobile-menu");
 
   if (mobileMenuToggle && mobileMenu) {
     mobileMenuToggle.addEventListener("click", () => {
+      const isExpanded = mobileMenuToggle.getAttribute("aria-expanded") === "true";
       mobileMenu.classList.toggle("hidden");
+      mobileMenuToggle.setAttribute("aria-expanded", String(!isExpanded));
     });
   }
 </script>

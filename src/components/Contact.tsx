@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { Github, Linkedin, Mail, MapPin } from "lucide-react"
+import { t as i18n } from "@/lib/i18n"
 
 interface ContactProps {
   lang: "en" | "es"
@@ -25,78 +26,33 @@ export default function Contact({ lang }: ContactProps) {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [errors, setErrors] = useState<FormErrors>({})
 
-  const translations = {
-    en: {
-      title: "Get in Touch",
-      description: "Have a project in mind or want to chat? Feel free to reach out!",
-      nameLabel: "Name",
-      emailLabel: "Email",
-      messageLabel: "Message",
-      submitButton: "Send Message",
-      submitting: "Sending...",
-      successMessage: "Thanks for your message! I'll get back to you soon.",
-      errorMessage: "There was an error sending your message. Please try again.",
-      contactInfo: "Contact Information",
-      location: "Madrid, Spain",
-      followMe: "Follow Me",
-      sendAnother: "Send Another Message",
-      validation: {
-        required: "This field is required",
-        email: "Please enter a valid email address",
-        nameLength: "Name must be at least 2 characters",
-        messageLength: "Message must be at least 10 characters"
-      }
-    },
-    es: {
-      title: "Ponte en Contacto",
-      description: "¿Tienes un proyecto en mente o quieres charlar? ¡No dudes en contactarme!",
-      nameLabel: "Nombre",
-      emailLabel: "Correo Electrónico",
-      messageLabel: "Mensaje",
-      submitButton: "Enviar Mensaje",
-      submitting: "Enviando...",
-      successMessage: "¡Gracias por tu mensaje! Te responderé pronto.",
-      errorMessage: "Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.",
-      contactInfo: "Información de Contacto",
-      location: "Madrid, España",
-      followMe: "Sígueme",
-      sendAnother: "Enviar Otro Mensaje",
-      validation: {
-        required: "Este campo es obligatorio",
-        email: "Por favor, introduce un correo electrónico válido",
-        nameLength: "El nombre debe tener al menos 2 caracteres",
-        messageLength: "El mensaje debe tener al menos 10 caracteres"
-      }
-    },
-  }
-
-  const t = translations[lang]
+  const T = i18n(lang)
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     
     // Validate name
     if (!formState.name.trim()) {
-      newErrors.name = t.validation.required;
+      newErrors.name = T.contact.validation.required;
     } else if (formState.name.trim().length < 2) {
-      newErrors.name = t.validation.nameLength;
+      newErrors.name = T.contact.validation.nameLength;
     }
     
     // Validate email
     if (!formState.email.trim()) {
-      newErrors.email = t.validation.required;
+      newErrors.email = T.contact.validation.required;
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formState.email)) {
-        newErrors.email = t.validation.email;
+        newErrors.email = T.contact.validation.email;
       }
     }
     
     // Validate message
     if (!formState.message.trim()) {
-      newErrors.message = t.validation.required;
+      newErrors.message = T.contact.validation.required;
     } else if (formState.message.trim().length < 10) {
-      newErrors.message = t.validation.messageLength;
+      newErrors.message = T.contact.validation.messageLength;
     }
     
     setErrors(newErrors);
@@ -179,9 +135,9 @@ export default function Contact({ lang }: ContactProps) {
     } catch (err: unknown) {
       const error = err instanceof Error ? err : new Error(String(err));
       if (error.name === "AbortError") {
-        setErrors({ general: t.errorMessage + " (Request timeout)" });
+        setErrors({ general: T.contact.errorMessage + " (Request timeout)" });
       } else {
-        setErrors({ general: error.message || t.errorMessage });
+        setErrors({ general: error.message || T.contact.errorMessage });
       }
       console.error("Submission error:", error);
     } finally {
@@ -195,13 +151,13 @@ export default function Contact({ lang }: ContactProps) {
         <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t.title}</h2>
-              <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">{t.description}</p>
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{T.contact.title}</h2>
+              <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">{T.contact.description}</p>
             </div>
 
             <div className="space-y-6 mt-6">
               <div>
-                <h3 className="text-xl font-bold mb-3">{t.contactInfo}</h3>
+                <h3 className="text-xl font-bold mb-3">{T.contact.contactInfo}</h3>
                 <div className="space-y-3">
                   <a
                     href="mailto:dominguezperezsergio03@gmail.com"
@@ -212,13 +168,13 @@ export default function Contact({ lang }: ContactProps) {
                   </a>
                   <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                     <MapPin className="h-5 w-5" />
-                    <span>{t.location}</span>
+                    <span>{T.contact.location}</span>
                   </div>
                 </div>
               </div>
 
               <div>
-                <h3 className="text-xl font-bold mb-3">{t.followMe}</h3>
+                <h3 className="text-xl font-bold mb-3">{T.contact.followMe}</h3>
                 <div className="flex gap-4">
                   <a
                     href="https://github.com/SergioLKG"
@@ -257,12 +213,12 @@ export default function Contact({ lang }: ContactProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold mb-2">{t.successMessage}</h3>
+                <h3 className="text-xl font-bold mb-2">{T.contact.successMessage}</h3>
                 <button
                   onClick={() => setIsSubmitted(false)}
                   className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
-                  {t.sendAnother}
+                  {T.contact.sendAnother}
                 </button>
               </div>
             ) : (
@@ -272,7 +228,7 @@ export default function Contact({ lang }: ContactProps) {
                     htmlFor="name"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    {t.nameLabel}
+                    {T.contact.nameLabel}
                   </label>
                   <input
                     id="name"
@@ -280,18 +236,19 @@ export default function Contact({ lang }: ContactProps) {
                     type="text"
                     value={formState.name}
                     onChange={handleChange}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                     className={`flex h-10 w-full rounded-md border ${
                       errors.name ? 'border-red-500' : 'border-input'
                     } bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
                   />
-                  {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+                  {errors.name && <p id="name-error" className="text-red-500 text-xs mt-1" role="alert">{errors.name}</p>}
                 </div>
                 <div className="space-y-2">
                   <label
                     htmlFor="email"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    {t.emailLabel}
+                    {T.contact.emailLabel}
                   </label>
                   <input
                     id="email"
@@ -299,18 +256,19 @@ export default function Contact({ lang }: ContactProps) {
                     type="email"
                     value={formState.email}
                     onChange={handleChange}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                     className={`flex h-10 w-full rounded-md border ${
                       errors.email ? 'border-red-500' : 'border-input'
                     } bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
                   />
-                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                  {errors.email && <p id="email-error" className="text-red-500 text-xs mt-1" role="alert">{errors.email}</p>}
                 </div>
                 <div className="space-y-2">
                   <label
                     htmlFor="message"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    {t.messageLabel}
+                    {T.contact.messageLabel}
                   </label>
                   <textarea
                     id="message"
@@ -318,11 +276,12 @@ export default function Contact({ lang }: ContactProps) {
                     value={formState.message}
                     onChange={handleChange}
                     rows={5}
+                    aria-describedby={errors.message ? "message-error" : undefined}
                     className={`flex w-full rounded-md border ${
                       errors.message ? 'border-red-500' : 'border-input'
                     } bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
                   />
-                  {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+                  {errors.message && <p id="message-error" className="text-red-500 text-xs mt-1" role="alert">{errors.message}</p>}
                 </div>
                 {errors.general && <div className="text-red-500 text-sm">{errors.general}</div>}
                 <button
@@ -330,7 +289,7 @@ export default function Contact({ lang }: ContactProps) {
                   disabled={isSubmitting}
                   className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                 >
-                  {isSubmitting ? t.submitting : t.submitButton}
+                  {isSubmitting ? T.contact.submitting : T.contact.submitButton}
                 </button>
               </form>
             )}

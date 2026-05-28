@@ -1,5 +1,6 @@
 ---
 import { Github, Linkedin, Mail, FileText } from 'lucide-react';
+import { t as i18n } from "@/lib/i18n";
 
 interface Props {
   lang: 'en' | 'es';
@@ -9,25 +10,14 @@ const { lang } = Astro.props;
 const year = new Date().getFullYear();
 const resumeLink = lang === 'en' ? '/resume-sergio-dominguez-en.pdf' : '/resume-sergio-dominguez-es.pdf';
 
-const translations = {
-  en: {
-    copyright: "© {year} Sergio Domínguez Pérez. All rights reserved.",
-    madeWith: "Made with Astro and React"
-  },
-  es: {
-    copyright: "© {year} Sergio Domínguez Pérez. Todos los derechos reservados.",
-    madeWith: "Hecho con Astro y React"
-  }
-};
-
-const t = translations[lang];
+const T = i18n(lang);
 ---
 
 <footer class="w-full border-t border-gray-200 dark:border-gray-800 py-6">
   <div class="container px-4 md:px-6">
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
       <p class="text-sm text-gray-500 dark:text-gray-400">
-        {t.copyright.replace('{year}', year.toString())}
+        {T.footer.copyright.replace('{year}', year.toString())}
       </p>
       <div class="flex items-center gap-4">
         <a href="https://github.com/SergioLKG" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
@@ -44,7 +34,7 @@ const t = translations[lang];
         </a>
       </div>
       <p class="text-xs text-gray-500 dark:text-gray-400">
-        {t.madeWith}
+        {T.footer.madeWith}
       </p>
     </div>
   </div>

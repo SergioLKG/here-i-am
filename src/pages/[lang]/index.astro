@@ -6,15 +6,7 @@ import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
 import Contact from "@/components/Contact";
 import GitHubWidget from "@/components/GitHubWidget";
-import SpotifyWidget from "@/components/SpotifyWidget";
-
-const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
-const SPOTIFY_CLIENT_ID = import.meta.env.SPOTIFY_CLIENT_ID;
-const SPOTIFY_CLIENT_SECRET = import.meta.env.SPOTIFY_CLIENT_SECRET;
-const SPOTIFY_REDIRECT_URL = import.meta.env.SPOTIFY_REDIRECT_URL;
-const SPOTIFY_FALLBACK_PLAYLIST = import.meta.env.SPOTIFY_FALLBACK_PLAYLIST;
-
-const spotifyAuthStatus = Astro.url.searchParams.get("spotify_auth");
+import { t as i18n } from "@/lib/i18n";
 
 export function getStaticPaths() {
   return [{ params: { lang: "en" } }, { params: { lang: "es" } }];
@@ -23,26 +15,11 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const validLang = lang === "en" || lang === "es" ? lang : "en";
 
-const translations = {
-  en: {
-    title: "Sergio Domínguez Pérez - Full-Stack Developer",
-    description:
-      "Sergio Domínguez Pérez is a Full-Stack Developer with experience in web and mobile application development. His portfolio includes notable projects that showcase his skills in technologies such as React, Node.js, and more. Explore his work and discover how he can help take your ideas to the next level.",
-    widgets: "Widgets",
-  },
-  es: {
-    title: "Sergio Domínguez Pérez - Desarrollador Full-Stack",
-    description:
-      "Sergio Domínguez Pérez es un desarrollador Full-Stack con experiencia en el desarrollo de aplicaciones web y móviles. Su portafolio incluye proyectos destacados que demuestran su habilidad en tecnologías como React, Node.js y más. Explora su trabajo y descubre cómo puede ayudar a llevar tus ideas al siguiente nivel.",
-    widgets: "Widgets",
-  },
-};
-
-const t = translations[validLang];
+const T = i18n(validLang);
 export const prerender = true;
 ---
 
-<Layout title={t.title} description={t.description} lang={validLang}>
+<Layout title={T.homePage.title} description={T.homePage.description} lang={validLang}>
   <Hero lang={validLang} client:idle />
   <TechStack lang={validLang} client:visible />
   <Experience lang={validLang} client:visible />
@@ -54,7 +31,7 @@ export const prerender = true;
         class="flex flex-col items-center justify-center space-y-4 text-center mb-8"
       >
         <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-          {t.widgets}
+          {T.homePage.widgets}
         </h2>
       </div>
 
@@ -62,20 +39,12 @@ export const prerender = true;
         <GitHubWidget
           username="SergioLKG"
           lang={validLang}
-          token={GITHUB_TOKEN}
           client:visible
         />
-        <!-- <SpotifyWidget
-          client:load
-          lang="es"
-          clientId={SPOTIFY_CLIENT_ID}
-          clientSecret={SPOTIFY_CLIENT_SECRET}
-          redirectUri={SPOTIFY_REDIRECT_URL}
-          fallbackPlaylistId={SPOTIFY_FALLBACK_PLAYLIST}
-        /> -->
+
       </div>
     </div>
   </section>
 
-  <Contact client:only="react" lang={validLang} />
+  <Contact lang={validLang} client:idle />
 </Layout>

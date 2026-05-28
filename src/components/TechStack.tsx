@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { t as i18n } from "@/lib/i18n"
 
 interface TechStackProps {
   lang: "es" | "en"
@@ -28,18 +29,7 @@ export default function TechStack({ lang }: TechStackProps) {
     return () => observer.disconnect()
   }, [])
 
-  const translations = {
-    en: {
-      title: "Tech Stack",
-      description: "Technologies I work with",
-    },
-    es: {
-      title: "Stack Tecnológico",
-      description: "Tecnologías con las que trabajo",
-    },
-  }
-
-  const t = translations[lang]
+  const T = i18n(lang)
 
   // Group technologies by category for better organization
   const technologies = [
@@ -59,23 +49,13 @@ export default function TechStack({ lang }: TechStackProps) {
     { name: "Bitbucket", icon: "/icons/bitbucket.svg", category: "tools" },
   ]
 
-  // Preload images for better performance
-  useEffect(() => {
-    technologies.forEach((tech) => {
-      if (tech.icon) {
-        const img = new Image()
-        img.src = tech.icon
-      }
-    })
-  }, [])
-
   return (
     <section id="tech-stack" ref={sectionRef} className="py-12 md:py-16 bg-gray-50 dark:bg-gray-800/50">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{t.title}</h2>
-            <p className="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl">{t.description}</p>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{T.techStack.title}</h2>
+            <p className="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl">{T.techStack.description}</p>
           </div>
         </div>
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
