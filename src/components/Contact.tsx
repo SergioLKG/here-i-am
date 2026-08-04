@@ -2,7 +2,8 @@
 
 import type React from "react"
 import { useState, useCallback } from "react"
-import { Github, Linkedin, Mail, MapPin, Copy, Check } from "lucide-react"
+import { Mail, MapPin, Copy, Check } from "lucide-react"
+import { Github, Linkedin } from "@/components/BrandIcons"
 import { t as i18n } from "@/lib/i18n"
 
 interface ContactProps {

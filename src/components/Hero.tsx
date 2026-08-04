@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Github, Linkedin, Mail, FileText, ArrowRight } from "lucide-react";
+import { Mail, FileText, ArrowRight } from "lucide-react";
+import { Github, Linkedin } from "@/components/BrandIcons";
 import { t as i18n } from "@/lib/i18n";
 
 interface HeroProps {

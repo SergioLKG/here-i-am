@@ -209,7 +209,7 @@ export default function Experience({ lang }: ExperienceProps) {
             {experiences.map((exp, index) => (
               <button
                 key={index}
-                className={`px-4 py-2 rounded-full text-sm whitespace-nowrap ${
+                className={`px-4 py-2 rounded-full text-sm whitespace-nowrap font-bold ${
                   activeExperience === index
                     ? "bg-primary text-white"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"

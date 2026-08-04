@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Github, GitCommit, Star } from "lucide-react";
+import { GitCommit, Star } from "lucide-react";
+import { Github } from "@/components/BrandIcons";
 import { t as i18n } from "@/lib/i18n";
 
 interface GitHubWidgetProps {

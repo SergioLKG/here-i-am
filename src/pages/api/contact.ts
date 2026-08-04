@@ -15,7 +15,7 @@ const ContactSchema = z.object({
     .string()
     .min(2, { message: "Name must be at least 2 characters" })
     .max(100),
-  email: z.string().email({ message: "Invalid email address" }).max(100),
+  email: z.email({ message: "Invalid email address" }).max(100),
   message: z
     .string()
     .min(10, { message: "Message must be at least 10 characters" })
@@ -106,7 +106,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       return new Response(
         JSON.stringify({
           error: "Validation failed",
-          details: error.errors,
+          details: error.issues,
         }),
         {
           status: 400,

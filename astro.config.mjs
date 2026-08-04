@@ -1,26 +1,21 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import vercel from '@astrojs/vercel/serverless';
+import vercel from '@astrojs/vercel';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sergiodominguez.vercel.app',
   output: 'server',
 
+  vite: {
+    plugins: [tailwindcss()]
+  },
+
   integrations: [
-    tailwind(),
     react(),
-    sitemap({
-      i18n: {
-        defaultLocale: 'es',
-        locales: {
-          en: 'en',
-          es: 'es'
-        }
-      }
-    })
+    sitemap()
   ],
 
   i18n: {

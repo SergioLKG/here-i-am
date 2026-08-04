@@ -1,6 +1,6 @@
 ---
-import Analytics from '@vercel/analytics/astro'
-import { ViewTransitions } from "astro:transitions";
+import Analytics from "@vercel/analytics/astro";
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
@@ -12,11 +12,7 @@ interface Props {
   lang?: "en" | "es";
 }
 
-const {
-  title,
-  description,
-  lang = "en",
-} = Astro.props;
+const { title, description, lang = "en" } = Astro.props;
 
 const T = i18n(lang);
 const altLang = lang === "en" ? "es" : "en";
@@ -40,11 +36,17 @@ export const prerender = true;
       property="og:site_name"
       content="Sergio Domínguez Pérez - Full-Stack Developer Portfolio"
     />
-    <meta name="keywords" content="Sergio Domínguez Pérez, Full-Stack Developer, Portfolio, programador, programador españa, nodejs, react, angular, php, symfony, wordpress, tailwind, bootstrap, " />
+    <meta
+      name="keywords"
+      content="Sergio Domínguez Pérez, Full-Stack Developer, Portfolio, programador, programador españa, nodejs, react, angular, php, symfony, wordpress, tailwind, bootstrap, "
+    />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={new URL(currentPath, Astro.site).href} />
-    <meta property="og:image" content={new URL("/screenshot.jpg", Astro.site).href} />
+    <meta
+      property="og:image"
+      content={new URL("/screenshot.jpg", Astro.site).href}
+    />
     <meta
       property="og:image:alt"
       content="Sergio Domínguez Pérez - Full-Stack Developer Portfolio"
@@ -56,7 +58,10 @@ export const prerender = true;
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL("/screenshot.jpg", Astro.site).href} />
+    <meta
+      name="twitter:image"
+      content={new URL("/screenshot.jpg", Astro.site).href}
+    />
     <meta name="twitter:creator" content="@sergiolkg" />
     <meta name="twitter:site" content="@sergiolkg" />
     <meta name="twitter:site:id" content="sergiolkg" />
@@ -66,7 +71,7 @@ export const prerender = true;
       content="Sergio Domínguez Pérez - Full-Stack Developer Portfolio"
     />
     <!-- scripts -->
-    <ViewTransitions />
+    <ClientRouter />
     <!-- links -->
     <link
       rel="icon"
@@ -83,52 +88,69 @@ export const prerender = true;
     <link
       rel="alternate"
       hreflang="en"
-      href={new URL(`/en${currentPath.replace(/^\/(en|es)/, "")}`, Astro.site).href}
+      href={new URL(`/en${currentPath.replace(/^\/(en|es)/, "")}`, Astro.site)
+        .href}
     />
     <link
       rel="alternate"
       hreflang="es"
-      href={new URL(`/es${currentPath.replace(/^\/(en|es)/, "")}`, Astro.site).href}
+      href={new URL(`/es${currentPath.replace(/^\/(en|es)/, "")}`, Astro.site)
+        .href}
     />
-    <link
-      rel="canonical"
-      href={new URL(currentPath, Astro.site).href}
-    />
+    <link rel="canonical" href={new URL(currentPath, Astro.site).href} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <script is:inline>
-      (function() {
-        var isDark = localStorage.getItem("darkMode") === "true" ||
+      (function () {
+        var isDark =
+          localStorage.getItem("darkMode") === "true" ||
           (localStorage.getItem("darkMode") === null &&
             window.matchMedia("(prefers-color-scheme: dark)").matches);
         if (isDark) document.documentElement.classList.add("dark");
       })();
     </script>
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: "Sergio Domínguez Pérez",
-      url: new URL(currentPath, Astro.site).href,
-      image: new URL("/screenshot.jpg", Astro.site).href,
-      jobTitle: "Full-Stack Developer",
-      sameAs: [
-        "https://github.com/SergioLKG",
-        "https://www.linkedin.com/in/sergiodominguezperez/"
-      ],
-      knowsAbout: ["Web Development", "Mobile Development", "Full-Stack Development", "React", "Node.js", "TypeScript", "Symfony", "WordPress"],
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Madrid",
-        addressCountry: "ES"
-      }
-    })} />
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "Sergio Domínguez Pérez - Full-Stack Developer",
-      url: Astro.site.href,
-      description: "Portfolio of Sergio Domínguez Pérez, a Full-Stack Developer based in Madrid, Spain.",
-      inLanguage: lang === "en" ? "en-US" : "es-ES",
-    })} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Sergio Domínguez Pérez",
+        url: new URL(currentPath, Astro.site).href,
+        image: new URL("/screenshot.jpg", Astro.site).href,
+        jobTitle: "Full-Stack Developer",
+        sameAs: [
+          "https://github.com/SergioLKG",
+          "https://www.linkedin.com/in/sergiodominguezperez/",
+        ],
+        knowsAbout: [
+          "Web Development",
+          "Mobile Development",
+          "Full-Stack Development",
+          "React",
+          "Node.js",
+          "TypeScript",
+          "Symfony",
+          "WordPress",
+        ],
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Madrid",
+          addressCountry: "ES",
+        },
+      })}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        name: "Sergio Domínguez Pérez - Full-Stack Developer",
+        url: Astro.site?.href,
+        description:
+          "Portfolio of Sergio Domínguez Pérez, a Full-Stack Developer based in Madrid, Spain.",
+        inLanguage: lang === "en" ? "en-US" : "es-ES",
+      })}
+    />
   </head>
   <body
     class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen flex flex-col"
@@ -140,7 +162,7 @@ export const prerender = true;
       altPath={altPath}
       countryFlag={countryFlag}
     />
-    <main class="flex-grow">
+    <main class="grow">
       <slot />
     </main>
     <Footer lang={lang} />
@@ -151,14 +173,25 @@ export const prerender = true;
       style="width: 0%"
       role="progressbar"
       aria-label="Scroll progress"
-    ></div>
+    >
+    </div>
     <button
       id="back-to-top"
       aria-label="Back to top"
       class="fixed bottom-6 right-6 z-50 rounded-full bg-primary p-3 text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring opacity-0 translate-y-4 pointer-events-none"
       style="transition: opacity 0.3s, transform 0.3s"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"><path d="m18 15-6-6-6 6"></path></svg
+      >
     </button>
     <script>
       const backToTop = document.getElementById("back-to-top");
@@ -167,7 +200,8 @@ export const prerender = true;
       if (backToTop && scrollProgress) {
         window.addEventListener("scroll", () => {
           const scrollTop = window.scrollY;
-          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const docHeight =
+            document.documentElement.scrollHeight - window.innerHeight;
           const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
 
           scrollProgress.style.width = `${progress}%`;
