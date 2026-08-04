@@ -228,7 +228,7 @@ export default function Contact({ lang }: ContactProps) {
                 <h3 className="text-xl font-bold mb-2">{T.contact.successMessage}</h3>
                 <button
                   onClick={() => setIsSubmitted(false)}
-                  className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="mt-4 inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-accent-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 >
                   {T.contact.sendAnother}
                 </button>

@@ -74,7 +74,7 @@ export default function Projects({ lang }: ProjectsProps) {
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
               {T.projects.title}
             </h2>
-            <p className="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl">
+            <p className="max-w-225 text-gray-500 dark:text-gray-400 md:text-xl">
               {T.projects.description}
             </p>
           </div>
@@ -84,7 +84,7 @@ export default function Projects({ lang }: ProjectsProps) {
           {projects.slice(0, visibleProjects).map((project, index) => (
             <div
               key={project.title}
-              className={`group relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm transition-all duration-300 hover:shadow-md transform hover:-translate-y-1 transition-opacity duration-500 ${
+              className={`group relative overflow-hidden rounded-lg border dark:bg-gray-900 dark:border-gray-800 border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md transform hover:-translate-y-1 ${
                 isVisible ? "opacity-100" : "opacity-0"
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
@@ -94,7 +94,7 @@ export default function Projects({ lang }: ProjectsProps) {
                   src={project.image || "/placeholder.svg?height=600&width=800"}
                   alt={project.title}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${project.image ? "" : " invert dark:invert-0"}`}
                 />
               </div>
               <div className="p-6">
@@ -154,7 +154,7 @@ export default function Projects({ lang }: ProjectsProps) {
           <div className="mt-12 text-center">
             <button
               onClick={loadMore}
-              className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-accent-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
               {T.projects.loadMore}
             </button>

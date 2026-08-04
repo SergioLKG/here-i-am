@@ -27,7 +27,7 @@ interface EducationItem {
   period: Record<SupportedLanguage, string>;
 }
 
-const education: EducationItem[] = [
+var education: EducationItem[] = [
   {
     degree: {
       en: "Higher Vocational Training in Multiplatform Application Development",
@@ -67,28 +67,56 @@ interface LanguageProficiency {
 
 const languages: Record<SupportedLanguage, LanguageProficiency[]> = {
   en: [
-    { name: T.experiencePage.english, level: T.experiencePage.advanced, percentage: 70 },
-    { name: T.experiencePage.spanish, level: T.experiencePage.native, percentage: 100 },
-    { name: T.experiencePage.galician, level: T.experiencePage.native, percentage: 100 },
+    {
+      name: T.experiencePage.english,
+      level: T.experiencePage.advanced,
+      percentage: 70,
+    },
+    {
+      name: T.experiencePage.spanish,
+      level: T.experiencePage.native,
+      percentage: 100,
+    },
+    {
+      name: T.experiencePage.galician,
+      level: T.experiencePage.native,
+      percentage: 100,
+    },
   ],
   es: [
-    { name: T.experiencePage.english, level: T.experiencePage.advanced, percentage: 70 },
-    { name: T.experiencePage.spanish, level: T.experiencePage.native, percentage: 100 },
-    { name: T.experiencePage.galician, level: T.experiencePage.native, percentage: 100 },
+    {
+      name: T.experiencePage.english,
+      level: T.experiencePage.advanced,
+      percentage: 70,
+    },
+    {
+      name: T.experiencePage.spanish,
+      level: T.experiencePage.native,
+      percentage: 100,
+    },
+    {
+      name: T.experiencePage.galician,
+      level: T.experiencePage.native,
+      percentage: 100,
+    },
   ],
 };
 
 export const prerender = true;
 ---
 
-<Layout title={T.experiencePage.title} description={T.experiencePage.description} lang={validLang}>
+<Layout
+  title={T.experiencePage.title}
+  description={T.experiencePage.description}
+  lang={validLang}
+>
   <main class="container px-4 md:px-6 py-12 md:py-24">
     <div
       class="flex flex-col items-center justify-center space-y-4 text-center mb-12"
     >
       <div class="space-y-2">
         <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-{T.experiencePage.pageTitle}
+          {T.experiencePage.pageTitle}
         </h1>
         <p class="max-w-[900px] text-gray-500 dark:text-gray-400 md:text-xl">
           {T.experiencePage.pageDescription}
@@ -134,7 +162,9 @@ export const prerender = true;
 
               {exp.responsibilities[validLang].length > 0 && (
                 <div>
-                  <h3 class="font-medium mb-2">{T.experiencePage.responsibilities}:</h3>
+                  <h3 class="font-medium mb-2">
+                    {T.experiencePage.responsibilities}:
+                  </h3>
                   <ul class="list-disc pl-5 space-y-1">
                     {exp.responsibilities[validLang].map((responsibility) => (
                       <li>{responsibility}</li>
@@ -221,7 +251,7 @@ export const prerender = true;
                     <div
                       class="bg-primary h-2.5 rounded-full transition-all duration-1000"
                       style={`width: ${language.percentage}%`}
-                    ></div>
+                    />
                   </div>
                   <p class="text-right text-sm mt-1 text-gray-500 dark:text-gray-400">
                     {language.level}
@@ -240,7 +270,7 @@ export const prerender = true;
   // Add animation to progress bars when they come into view
   document.addEventListener("DOMContentLoaded", () => {
     const progressBars = document.querySelectorAll(
-      '[role="progressbar"] > div'
+      '[role="progressbar"] > div',
     );
 
     const observer = new IntersectionObserver(
@@ -255,10 +285,10 @@ export const prerender = true;
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
-    progressBars.forEach((bar:any) => {
+    progressBars.forEach((bar: any) => {
       // Start with width 0
       bar.style.width = "0%";
       observer.observe(bar);
@@ -268,7 +298,7 @@ export const prerender = true;
   // Add class for animation
   document.addEventListener("astro:page-load", () => {
     const animatedElements = document.querySelectorAll(".animate-in");
-    animatedElements.forEach((el:any) => {
+    animatedElements.forEach((el: any) => {
       const targetWidth = el.getAttribute("data-width") || "0%";
       el.style.width = targetWidth;
     });

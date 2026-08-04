@@ -19,7 +19,7 @@ export default function Hero({ lang }: HeroProps) {
       alt: "Sergio Domínguez Pérez",
     },
     {
-      src: "/images/hero.jpeg",
+      src: "/images/hero.webp",
       alt: "Sergio Domínguez Pérez",
     },
   ];
@@ -61,13 +61,13 @@ export default function Hero({ lang }: HeroProps) {
                 {T.hero.location}
               </p>
             </div>
-            <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">
+            <p className="max-w-150 text-gray-500 dark:text-gray-400 md:text-xl">
               {T.hero.description}
             </p>
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
               <a
                 href={`/${lang}/contact`}
-                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-accent-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 aria-label={T.hero.contactMe}
               >
                 {T.hero.contactMe}
@@ -118,8 +118,8 @@ export default function Hero({ lang }: HeroProps) {
                 : "opacity-0 translate-y-4"
             }`}
           >
-            <div className="relative w-full max-w-sm overflow-hidden rounded-lg shadow-xl aspect-[3/4] md:aspect-square">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-10"></div>
+            <div className="relative w-full max-w-sm overflow-hidden rounded-lg shadow-xl aspect-3/4 md:aspect-square">
+              <div className="absolute inset-0 bg-linear-to-r from-primary to-secondary opacity-10"></div>
               {images.map((image, index) => (
                 <img
                   key={index}
@@ -133,6 +133,7 @@ export default function Hero({ lang }: HeroProps) {
                       : "opacity-0 z-0"
                   }`}
                   loading="eager"
+                  fetchPriority="high"
                 />
               ))}
             </div>

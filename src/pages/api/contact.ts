@@ -1,13 +1,13 @@
 // src/pages/api/contact.ts
 import type { APIRoute } from "astro";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import { z } from "zod";
 import { emailTemplate } from "@/templates/contact-form";
 
-// Initialize Resend only if API key exists
-const myEmail = import.meta.env.MY_EMAIL;
-const resendApiKey = import.meta.env.RESEND_API_KEY;
-const resend = resendApiKey ? new Resend(resendApiKey) : null;
+// Gmail credentials from environment variables
+const gmailUser = import.meta.env.GMAIL_USER;
+const gmailAppPassword = import.meta.env.GMAIL_APP_PASSWORD;
+const recipientEmail = import.meta.env.GMAIL_TO || gmailUser;
 
 // Validation schema using Zod
 const ContactSchema = z.object({
@@ -29,7 +29,7 @@ const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in ms
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
-    if (!myEmail) {
+    if (!gmailUser || !gmailAppPassword) {
       throw new Error("Email service not configured");
     }
 
@@ -71,23 +71,25 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
     const emailHtml = emailTemplate(validatedData);
 
-    // Check if Resend is configured
-    if (!resend) {
-      throw new Error("Email service not configured");
-    }
-
-    // Send email
-    const emailResponse = await resend.emails.send({
-      from: `HIA ${validatedData.name} <onboarding@resend.dev>`,
-      to: myEmail,
-      subject: "HereIAm - Contact Form Submission",
-      html: emailHtml,
+    // Create Gmail transport
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: gmailUser,
+        pass: gmailAppPassword,
+      },
     });
 
-    // Check if email was sent successfully
-    if (!emailResponse) {
-      throw new Error("Failed to send email");
-    }
+    // Send email
+    await transporter.sendMail({
+      from: `HereIAm <${gmailUser}>`,
+      to: recipientEmail,
+      replyTo: validatedData.email,
+      subject: `HereIAm - Contact Form Submission from ${validatedData.name}`,
+      html: emailHtml,
+    });
 
     // Successful response
     return new Response(
