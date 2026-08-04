@@ -1,0 +1,28 @@
+# Sergio Domínguez Pérez — Full-Stack Developer Portfolio
+
+> Personal portfolio of Sergio Domínguez Pérez, a full-stack developer specializing in web and mobile applications. Bilingual site (English / Spanish). Built with Astro, React, Tailwind CSS, and deployed on Vercel.
+
+## Main Pages
+
+- [Home (English)](https://sergiodominguez.vercel.app/en/): Hero, tech stack, professional experience, featured projects, and GitHub activity.
+- [Home (Español)](https://sergiodominguez.vercel.app/es/): Versión en español de la portada.
+- [Experience / Experiencia](https://sergiodominguez.vercel.app/en/experience): Professional background and work history.
+- [Projects / Proyectos](https://sergiodominguez.vercel.app/en/projects): Featured portfolio projects.
+- [Web Projects](https://sergiodominguez.vercel.app/en/projects/web): Web application projects.
+- [Mobile Projects](https://sergiodominguez.vercel.app/en/projects/mobile): Mobile application projects.
+- [Backend Projects](https://sergiodominguez.vercel.app/en/projects/backend): Backend / API projects.
+- [Contact / Contacto](https://sergiodominguez.vercel.app/en/contact): Contact form and details.
+
+## Resume
+
+- [Resume (English) PDF](https://sergiodominguez.vercel.app/resume-sergio-dominguez-en.pdf)
+- [Currículum (Español) PDF](https://sergiodominguez.vercel.app/resume-sergio-dominguez-es.pdf)
+
+## Optional
+
+- [Sitemap](https://sergiodominguez.vercel.app/sitemap-index.xml)
+- [robots.txt](https://sergiodominguez.vercel.app/robots.txt)
+
+## Contact
+
+- Email: sergiodp.dev@gmail.com
