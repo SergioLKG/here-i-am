@@ -160,7 +160,7 @@ export default function Contact({ lang }: ContactProps) {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{T.contact.title}</h2>
-              <p className="max-w-[600px] text-gray-500 dark:text-gray-400 md:text-xl">{T.contact.description}</p>
+              <p className="max-w-150 text-gray-500 dark:text-gray-400 md:text-xl">{T.contact.description}</p>
             </div>
 
             <div className="space-y-6 mt-6">
@@ -213,7 +213,7 @@ export default function Contact({ lang }: ContactProps) {
 
           <div className="rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 shadow-sm">
             {isSubmitted ? (
-              <div className="p-6 flex flex-col items-center justify-center min-h-[400px] text-center">
+              <div className="p-6 flex flex-col items-center justify-center min-h-100 text-center">
                 <div className="rounded-full bg-green-100 dark:bg-green-900/20 p-3 mb-4">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
