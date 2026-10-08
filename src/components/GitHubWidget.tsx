@@ -100,14 +100,14 @@ export default function GitHubWidget({
       </div>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="border flex flex-col items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
           <Github className="h-6 w-6 mb-2" />
           <span className="text-2xl font-bold">{data.repos}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">
             {T.githubWidget.repos}
           </span>
         </div>
-        <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="border flex flex-col items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6 mb-2"
@@ -127,14 +127,14 @@ export default function GitHubWidget({
             {T.githubWidget.followers}
           </span>
         </div>
-        <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="border flex flex-col items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
           <GitCommit className="h-6 w-6 mb-2" />
           <span className="text-2xl font-bold">{data.contributions}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">
             {T.githubWidget.contributions}
           </span>
         </div>
-        <div className="flex flex-col items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+        <div className="border flex flex-col items-center p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
           <Star className="h-6 w-6 mb-2" />
           <span className="text-2xl font-bold">{data.stars}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">
