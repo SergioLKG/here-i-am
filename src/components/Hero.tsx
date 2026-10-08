@@ -15,6 +15,14 @@ export default function Hero({ lang }: HeroProps) {
 
   const images = [
     {
+      src: "/images/hero4.webp",
+      alt: "Sergio Domínguez Pérez",
+    },
+    {
+      src: "/images/hero3.webp",
+      alt: "Sergio Domínguez Pérez",
+    },
+    {
       src: "/images/hero2.webp",
       alt: "Sergio Domínguez Pérez",
     },

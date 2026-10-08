@@ -44,7 +44,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 229.2 83.2% 53.3%;
+    --primary: 206.2 90.2% 55.3%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -83,7 +83,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 229.2 83.2% 53.3%;
+    --primary: 206.2 90.2% 55.3%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -110,6 +110,9 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  button {
+    @apply cursor-pointer;
   }
 }
 
@@ -138,4 +141,3 @@ html {
 .container {
   @apply mx-auto max-w-7xl;
 }
-
